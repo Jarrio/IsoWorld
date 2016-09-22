@@ -1,4 +1,4 @@
-package;
+package state;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -7,7 +7,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 
-class MenuState extends FlxState
+class PlayState extends FlxState
 {
 	override public function create():Void
 	{
