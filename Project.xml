@@ -79,4 +79,8 @@
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
+
+	<haxelib name="hxcpp-debugger" if="debug" />
+	<haxedef name="HXCPP_DEBUGGER" if="debug" />
+		
 </project>
