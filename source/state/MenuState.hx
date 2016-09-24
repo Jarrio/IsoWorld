@@ -7,8 +7,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 
-class MenuState extends FlxState
-{
+class MenuState extends FlxState {
 	override public function create():Void {
 		super.create();
 		var switchToGridState = new FlxButton(20, 20, "Grid State", function() {FlxG.switchState(new GridState());});

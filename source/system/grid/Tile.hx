@@ -2,9 +2,10 @@ package system.grid;
 
 import flixel.FlxSprite;
 
-public class Tile extends FlxSprite {
+class Tile extends FlxSprite {
 
     public function new() {
-    
+        super();
+        this.loadGraphic(AssetPaths.base_iso_tile__png);
     }
 }
