@@ -3,11 +3,14 @@ package system.grid;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import system.helpers.Isometric;
 
 class Tile extends FlxSprite {
     public var number = new FlxText();
-    public function new(cellx:Int, celly:Int, _x:Float, _y:Float) {
-        super(_x, _y);
+    public function new(cellx:Int, celly:Int) {
+        var _point = Isometric.TwoDToIso(new FlxPoint(cellx, celly));
+
+        super(_point.x, _point.y);
 
         this.loadGraphic(AssetPaths.base_iso_tile__png);
         

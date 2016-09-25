@@ -24,10 +24,10 @@ class GridState extends FlxState {
 		grid = new Grid();
 		grid.CalculateTiles();
 
-		for (i in 0...grid.StoredTiles.length) {
-			var tile = grid.StoredTiles[i];
-			add(tile);
-			add(tile.number);			
+		for (i in 0...grid.chunks.length) {
+			var chunk = grid.chunks[i];
+			add(chunk.chunk_tiles);
+			add(chunk.chunk_tiles.number);			
 		}
 		
 		player = new Player();

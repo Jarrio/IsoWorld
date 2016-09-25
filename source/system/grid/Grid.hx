@@ -8,13 +8,22 @@ import flixel.math.FlxPoint;
 import system.helpers.Isometric;
 
 class Grid {
-    public var StoredTiles:Array<Tile> = new Array<Tile>();
+    public var chunk_size:Int = 2;
+    public var chunks:Array<Chunk> = new Array<Chunk>();
 
     public function new () {
 
     }
 
-    public function CalculateTiles() {
+    public function LoadChunks() {
+        for (y in 0...chunk_size) {
+            for (x in 0...chunk_size) {
+                
+            }
+        }
+    }
+
+    public function CalculateTiles() {/*
         for (cellY in 0...10) {            
             for (cellX in 0...10) {
 			    var oldPoint = new FlxPoint(cellX, cellY);
@@ -32,6 +41,6 @@ class Grid {
                 
                 StoredTiles[StoredTiles.length] = newTile;
             }
-        }
+        }*/
     }
 }

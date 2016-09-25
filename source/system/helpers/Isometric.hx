@@ -5,10 +5,10 @@ import flixel.math.FlxPoint;
 
 class Isometric {
     static public function IsoTo2D(map:FlxPoint):FlxPoint{
-        var StartX:Float = (FlxG.width / 2) - 32;
-        var StartY:Float = 100;
-        var newX = map.x - StartX;
-        var newY = map.y - StartY;
+        //var StartX:Float = (FlxG.width / 2) - 32;
+        //var StartY:Float = 100;
+        var newX = map.x;
+        var newY = map.y;
 
         var screen:FlxPoint = new FlxPoint(0, 0);
 
@@ -20,12 +20,12 @@ class Isometric {
     }
 
     static public function TwoDToIso(map:FlxPoint):FlxPoint{
-        var StartX:Float = (FlxG.width / 2) - 32;
-        var StartY:Float = 100;
+        //var StartX:Float = (FlxG.width / 2) - 32;
+        //var StartY:Float = 100;
         var screen:FlxPoint = new FlxPoint(0, 0);
 
-        screen.x = StartX + ((map.x - map.y) * 32);
-        screen.y = StartY + ((map.x + map.y) * 16);        
+        screen.x =  ((map.x - map.y) * 32);
+        screen.y =  ((map.x + map.y) * 16);        
 
         return screen;
     }
@@ -34,10 +34,10 @@ class Isometric {
         * convert a 2d point to specific tile row/column
         * */
     static public function GridCordsFromScreen(map:FlxPoint):FlxPoint {
-        var StartX:Float = (FlxG.width / 2) - 32;
-        var StartY:Float = 100;
-        var newX = map.x - StartX;
-        var newY = map.y - StartY;
+        //var StartX:Float = (FlxG.width / 2) - 32;
+        //var StartY:Float = 100;
+        var newX = map.x ;
+        var newY = map.y ;
 
         var screen:FlxPoint=new FlxPoint(0,0);
         screen.x = Math.floor((newX / 32 + newY / 16) / 2);
