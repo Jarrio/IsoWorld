@@ -17,6 +17,7 @@ class Player extends FlxSprite {
         this.loadGraphic(AssetPaths.player_iso__png);
         x = newPoint.x + 16;
         y = newPoint.y - 7;
+        this.visible = false;
     }
 
     override public function update(elapsed:Float):Void {

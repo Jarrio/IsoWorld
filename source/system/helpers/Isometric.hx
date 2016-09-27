@@ -30,6 +30,38 @@ class Isometric {
         return screen;
     }
 
+    static public function ChunkIsoTo2D(map:FlxPoint):FlxPoint{
+        //var StartX:Float = (FlxG.width / 2) - 32;
+        //var StartY:Float = 100;
+        var newX = map.x;
+        var newY = map.y;
+
+        var screen:FlxPoint = new FlxPoint(0, 0);
+
+        screen.x = (newX / 32 + newY / 16) / 2;
+        screen.y = (newY / 16 - (newX / 32)) / 2;
+                                         
+                                        
+        return(screen);
+    }
+
+    static public function Chunk2dToIso(map:FlxPoint):FlxPoint{
+        var screen:FlxPoint = new FlxPoint(0, 0);
+
+        screen.x =  ((map.x - map.y) * (32 * 3));
+        screen.y =  ((map.x + map.y) * (16 * 3));        
+
+        return screen;
+    }
+
+    static public function ChunkLine2dToIso(map:FlxPoint):FlxPoint{
+        var screen:FlxPoint = new FlxPoint(0, 0);
+
+        screen.x =  ((map.x - map.y) * 1);
+        screen.y =  ((map.x + map.y) * 50);        
+
+        return screen;
+    }    
     /**
         * convert a 2d point to specific tile row/column
         * */

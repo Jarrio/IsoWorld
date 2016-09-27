@@ -3,6 +3,8 @@ package system.grid;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import flixel.math.FlxPoint;
+
 import system.helpers.Isometric;
 
 class Tile extends FlxSprite {
@@ -19,4 +21,5 @@ class Tile extends FlxSprite {
         number.x = this.x + (this.width / 2) - (number.fieldWidth / 2);
         number.y = this.y + (this.height / 2) - (number.height / 2);
     }
+
 }
