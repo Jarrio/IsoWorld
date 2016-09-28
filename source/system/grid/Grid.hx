@@ -24,14 +24,14 @@ class Grid {
     }
 
     public function LoadChunks() {
-        for (y in 0...chunk_render_distance) {
-            for (x in 0...chunk_render_distance) {
-                var chunk_size = 3;
+        var chunk_distance_x = Math.floor(map_camera.width / 64);
+        var chunk_distance_y = Math.floor(map_camera.height / 32);
+        FlxG.log.notice('x: ${chunk_distance_x} y: ${chunk_distance_y}');
 
-                var chunk_width = chunk_size * 32;
-                var chunk_height = chunk_size * 16;                
+        for (y in 0...chunk_distance_y) {
+            for (x in 0...chunk_distance_x) {               
+                
                 var chunk_coords = Isometric.Chunk2dToIso(new FlxPoint(x, y));                
-
                 var new_chunk = new Chunk();
 
 

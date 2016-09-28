@@ -31,12 +31,14 @@ class GridState extends FlxState {
 		add(grid.chunks);
 		
 		player = new Player();
+		player.visible = true;
 		add(player);
 
 		info = new FlxText(400, 20);
 		info.color = FlxColor.WHITE;
 		add(info);
 
+		grid.map_camera.follow(player, FlxCameraFollowStyle.NO_DEAD_ZONE);
 		FlxG.cameras.reset(grid.map_camera);
 	}
 
