@@ -14,7 +14,7 @@ class Main extends Sprite {
 	public function new() {
 		super();		
 		#if debug
-			new debugger.HaxeRemote(true, "localhost");
+			new debugger.HaxeRemote(false, "localhost");
 		#end
 		
 		addChild(new FlxGame(0, 0, MenuState));

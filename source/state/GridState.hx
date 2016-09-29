@@ -14,6 +14,7 @@ import flixel.util.FlxColor;
 import system.grid.Grid;
 import system.entities.Player;
 import system.helpers.Isometric;
+import flixel.system.FlxLinkedList;
 
 import flixel.group.FlxGroup;
 
@@ -23,16 +24,17 @@ class GridState extends FlxState {
 	public var info:FlxText;
 
 	public var ChunkGroup:FlxGroup = new FlxGroup();
+	public var ChunkRadius:FlxLinkedList;
 
 	override public function create():Void { 
 		super.create();
 		grid = new Grid();
 		grid.LoadChunks();
-		add(grid.chunks);
+
 		
 		player = new Player();
 		player.visible = true;
-		add(player);
+		
 
 		info = new FlxText(400, 20);
 		info.color = FlxColor.WHITE;
@@ -40,29 +42,39 @@ class GridState extends FlxState {
 
 		grid.map_camera.follow(player, FlxCameraFollowStyle.NO_DEAD_ZONE);
 		FlxG.cameras.reset(grid.map_camera);
+		
+		add(grid.chunks);
+		add(player);		
 	}
 
-	/*public function chunk(distance:Int) {
-		grid.chunks.forEach(function(sprite:FlxBasic) {
-			sprite.destroy();
-		});
-
-		grid.chunk_render_distance = distance;
-		grid.LoadChunks();
-		for (i in 0...grid.chunks.length) {
-			var chunk = grid.chunks[i];
-			ChunkGroup.add(chunk);				
+	public function UnloadChunks() {
+		for (i in 0...grid.chunks.members.length) {
+			var chunk = grid.chunks.members[i];
+			
+			var distance = 200;
+			if ((chunk.x - player.x) > distance || (chunk.y - player.y) > distance || (chunk.y - player.y) < -distance || (chunk.y - player.y) < -distance)  {
+				chunk.visible = false;
+			} else {
+				chunk.visible = true;
+			}
 		}
-	}*/
+	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
+
+		if (FlxG.keys.justPressed.PLUS) {
+			camera.zoom += 0.5;
+		} else if (FlxG.keys.justPressed.MINUS) {
+			camera.zoom -= 0.5;
+		}
 
 		var mousePos = new FlxPoint(FlxG.mouse.screenX, FlxG.mouse.screenY);
 		var mouseTile = Isometric.GridCordsFromScreen(mousePos);
 		info.text = ('Mouse X: ${mousePos.x} | Mouse Y: ${mousePos.y} \n') +
 					('Tile Y: ${mouseTile.y} | Tile X: ${mouseTile.x}');
-		
-		
+		UnloadChunks();
+	
+		trace(1);
 	}
 }

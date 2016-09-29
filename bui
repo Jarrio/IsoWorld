@@ -8,10 +8,15 @@
 --macro keep('IntIterator')
 -cp /usr/local/lib/haxe/lib/hscript/2,0,7
 -D hscript=2.0.7
+-cp /usr/local/lib/haxe/lib/hxcpp-debugger/git
+-D hxcpp-debugger=1.2.0
+-cp /usr/local/lib/haxe/lib/hxcpp/3,3,49
+-D hxcpp=3.3.49
 -cp source
 -cp /usr/local/lib/haxe/lib/openfl/3,6,1/extern
 -D HXCPP_QUIET
 -D openfl-next
+-D HXCPP_DEBUGGER
 -D tools=2.9.1
 -D FLX_NO_DEBUG
 -D no-compilation

@@ -22,7 +22,7 @@ class Chunk extends FlxSpriteGroup {
                 
                 var tile = new Tile(x, y);
                 add(tile);
-                add(tile.number);
+                //add(tile.number);
             }
         }
     }
