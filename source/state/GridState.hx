@@ -51,8 +51,8 @@ class GridState extends FlxState {
 		for (i in 0...grid.chunks.members.length) {
 			var chunk = grid.chunks.members[i];
 			
-			var distance = 200;
-			if ((chunk.x - player.x) > distance || (chunk.y - player.y) > distance || (chunk.y - player.y) < -distance || (chunk.y - player.y) < -distance)  {
+			var distance = 128;
+			if (Math.abs(chunk.x - player.x) > distance || Math.abs(chunk.y - player.y) > distance || Math.abs(chunk.y - player.y) < -distance || Math.abs(chunk.y - player.y) < -distance)  {
 				chunk.visible = false;
 			} else {
 				chunk.visible = true;
@@ -74,7 +74,5 @@ class GridState extends FlxState {
 		info.text = ('Mouse X: ${mousePos.x} | Mouse Y: ${mousePos.y} \n') +
 					('Tile Y: ${mouseTile.y} | Tile X: ${mouseTile.x}');
 		UnloadChunks();
-	
-		trace(1);
 	}
 }
