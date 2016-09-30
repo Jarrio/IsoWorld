@@ -9,12 +9,14 @@ import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import flixel.util.FlxCollision;
 import system.entities.Player;
+import flixel.system.FlxSound;
 
 
 class TestState extends FlxState {
 	public var player:Player;
 	public var floor:FlxSprite;
-
+	public var sound:FlxSound = new FlxSound();
+	
 	override public function create():Void {
 		super.create();
         player = new Player();
@@ -25,6 +27,11 @@ class TestState extends FlxState {
 		floor.immovable = true;
 		add(floor);
 		add(player);
+
+
+		sound.loadEmbedded(AssetPaths.tone__ogg, true, false);
+		sound.loopTime = 10.0;
+		sound.play(true);		
 		
 	}
 

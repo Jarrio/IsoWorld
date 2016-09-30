@@ -46,16 +46,15 @@ class GridState extends FlxState {
 		add(grid.chunks);
 		add(player);		
 	}
-
+	private var distance = 128;
 	public function UnloadChunks() {
 		for (i in 0...grid.chunks.members.length) {
 			var chunk = grid.chunks.members[i];
-			
-			var distance = 128;
+					
 			if (Math.abs(chunk.x - player.x) > distance || Math.abs(chunk.y - player.y) > distance || Math.abs(chunk.y - player.y) < -distance || Math.abs(chunk.y - player.y) < -distance)  {
-				chunk.visible = false;
+				chunk.kill();
 			} else {
-				chunk.visible = true;
+				chunk.revive();
 			}
 		}
 	}
