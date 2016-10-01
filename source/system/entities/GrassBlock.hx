@@ -9,7 +9,7 @@ import flixel.math.FlxPoint;
 
 import system.helpers.Isometric;
 
-class Block implements BlockPattern extends FlxSprite {
+class GrassBlock implements BlockPattern extends FlxSprite {
 
     public var z:Int;
     public var id:Int;
@@ -19,6 +19,6 @@ class Block implements BlockPattern extends FlxSprite {
         var _point = Isometric.TwoDToIso(new FlxPoint(cellx, celly));
 
         super(_point.x, _point.y);
-        loadGraphic(AssetPaths.base_cube__png);
+        loadGraphic(AssetPaths.grass_cube__png);
     } 
 }

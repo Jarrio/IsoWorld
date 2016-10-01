@@ -1,5 +1,6 @@
 package system.constants;
 
-enum BlockTypes {
-    
+@:enum
+abstract BlockTypes(Int) {
+    var Default = 0;
 }

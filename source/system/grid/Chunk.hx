@@ -6,13 +6,11 @@ import flixel.FlxG;
 import flixel.math.FlxPoint;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup;
+import flixel.math.FlxRandom;
 
 import system.helpers.Isometric;
-<<<<<<< HEAD
 import system.entities.Block;
-=======
 import system.constants.Map;
->>>>>>> a4cb3f87736ae1bc766632748a38caa5efe6b4b4
 
 class Chunk extends FlxSpriteGroup {
     public var chunk_size:Int = 3;
@@ -21,13 +19,16 @@ class Chunk extends FlxSpriteGroup {
     public function new() {
         super();
         for (y in 0...chunk_size) {
+            var random = new FlxRandom().int(0, 5);
             for (x in 0...chunk_size) {
+                 
                 var coord = new FlxPoint(x, y);
                 var point = Isometric.TwoDToIso(coord);
                 
                 var tile = new Block(x, y);
+                tile.z = random;
                 add(tile);
-                add(tile.number);
+                //add(tile.number);
             }
         }
     }

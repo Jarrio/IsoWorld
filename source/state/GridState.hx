@@ -13,6 +13,7 @@ import flixel.util.FlxColor;
 
 import system.grid.Grid;
 import system.entities.Player;
+import system.entities.GrassBlock;
 import system.helpers.Isometric;
 import flixel.system.FlxLinkedList;
 import flixel.group.FlxSpriteGroup;
@@ -44,7 +45,13 @@ class GridState extends FlxState {
 		FlxG.cameras.reset(grid.map_camera);
 		
 		add(grid.chunks);
-		add(player);		
+		add(player);
+
+		var gblock = new GrassBlock(-1, -1);
+		var gblock2 = new GrassBlock(-2, -2);
+		add(gblock);
+		add(gblock2);
+
 	}
 	
 	private var distance = 128;

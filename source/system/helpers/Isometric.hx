@@ -13,8 +13,9 @@ class Isometric {
 
         var screen:FlxPoint = new FlxPoint(0, 0);
 
+        
         screen.x = (newX / 32 + newY / 16) / 2;
-        screen.y = (newY / 16 - (newX / 32)) / 2;
+        screen.y = (newY / 16 - (newX / 32)) / 2;        
                                          
                                         
         return(screen);
@@ -26,7 +27,7 @@ class Isometric {
         var screen:FlxPoint = new FlxPoint(0, 0);
 
         screen.x =  ((map.x - map.y) * 32);
-        screen.y =  ((map.x + map.y) * 16);        
+        screen.y =  ((map.x + map.y) * 16);         
 
         return screen;
     }
