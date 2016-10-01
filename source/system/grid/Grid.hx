@@ -11,6 +11,8 @@ import system.helpers.Isometric;
 import system.grid.Chunk;
 using flixel.util.FlxSpriteUtil;
 
+import system.constants.Map;
+
 class Grid {
     public var chunk_render_distance:Int = 2;
     public var map_camera:FlxCamera;
@@ -54,6 +56,18 @@ class Grid {
                 //chunks.add(chunk_outline);
             }
         }
+    }
+
+    public function GetChunkPoint(position:FlxPoint) {
+        var newX = position.x;
+        var newY = position.y;
+
+        var screen:FlxPoint = new FlxPoint(0, 0);
+
+        screen.x = Math.ceil((newX / Map.BASE_TILE_HALF_WIDTH + newY / Map.BASE_TILE_HALF_HEIGHT) / Map.CHUNK_SIZE);
+        screen.y = Math.ceil((newY / Map.BASE_TILE_HALF_HEIGHT - (newX / Map.BASE_TILE_HALF_WIDTH)) / Map.CHUNK_SIZE);
+                                        
+        return(screen);        
     }
 
     public function CalculateTiles() {/*

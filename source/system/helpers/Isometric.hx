@@ -2,6 +2,7 @@ package system.helpers;
 
 import flixel.FlxG;
 import flixel.math.FlxPoint;
+import system.constants.Map;
 
 class Isometric {
     static public function IsoTo2D(map:FlxPoint):FlxPoint{
@@ -38,8 +39,8 @@ class Isometric {
 
         var screen:FlxPoint = new FlxPoint(0, 0);
 
-        screen.x = (newX / 32 + newY / 16) / 2;
-        screen.y = (newY / 16 - (newX / 32)) / 2;
+        screen.x = (newX / Map.BASE_TILE_HALF_WIDTH + newY / Map.BASE_TILE_HALF_HEIGHT) / Map.CHUNK_SIZE;
+        screen.y = (newY / Map.BASE_TILE_HALF_HEIGHT - (newX / Map.BASE_TILE_HALF_WIDTH)) / Map.CHUNK_SIZE;
                                          
                                         
         return(screen);
@@ -48,8 +49,8 @@ class Isometric {
     static public function Chunk2dToIso(map:FlxPoint):FlxPoint{
         var screen:FlxPoint = new FlxPoint(0, 0);
 
-        screen.x =  ((map.x - map.y) * (32 * 3));
-        screen.y =  ((map.x + map.y) * (16 * 3));        
+        screen.x =  ((map.x - map.y) * (Map.BASE_TILE_HALF_WIDTH * Map.CHUNK_SIZE));
+        screen.y =  ((map.x + map.y) * (Map.BASE_TILE_HALF_HEIGHT * Map.CHUNK_SIZE));        
 
         return screen;
     }
