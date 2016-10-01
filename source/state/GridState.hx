@@ -15,6 +15,7 @@ import system.grid.Grid;
 import system.entities.Player;
 import system.helpers.Isometric;
 import flixel.system.FlxLinkedList;
+import flixel.group.FlxSpriteGroup;
 
 import flixel.group.FlxGroup;
 
@@ -23,14 +24,13 @@ class GridState extends FlxState {
 	public var grid:Grid;
 	public var info:FlxText;
 
-	public var ChunkGroup:FlxGroup = new FlxGroup();
+	public var ChunkGroup:FlxSpriteGroup = new FlxSpriteGroup();
 	public var ChunkRadius:FlxLinkedList;
 
 	override public function create():Void { 
 		super.create();
 		grid = new Grid();
-		grid.LoadChunks();
-
+		grid.LoadChunks();		
 		
 		player = new Player();
 		player.visible = true;

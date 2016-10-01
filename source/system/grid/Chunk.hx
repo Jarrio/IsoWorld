@@ -8,6 +8,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup;
 
 import system.helpers.Isometric;
+import system.entities.Block;
 
 class Chunk extends FlxSpriteGroup {
     public var chunk_size:Int = 3;
@@ -20,7 +21,7 @@ class Chunk extends FlxSpriteGroup {
                 var coord = new FlxPoint(x, y);
                 var point = Isometric.TwoDToIso(coord);
                 
-                var tile = new Tile(x, y);
+                var tile = new Block(x, y);
                 add(tile);
                 //add(tile.number);
             }
