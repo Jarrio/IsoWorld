@@ -46,7 +46,9 @@ class GridState extends FlxState {
 		add(grid.chunks);
 		add(player);		
 	}
+	
 	private var distance = 128;
+
 	public function UnloadChunks() {
 		for (i in 0...grid.chunks.members.length) {
 			var chunk = grid.chunks.members[i];
@@ -68,10 +70,13 @@ class GridState extends FlxState {
 			camera.zoom -= 0.5;
 		}
 
-		var mousePos = new FlxPoint(FlxG.mouse.screenX, FlxG.mouse.screenY);
-		var mouseTile = Isometric.GridCordsFromScreen(mousePos);
+
+		var mousePos = new FlxPoint(FlxG.mouse.x, FlxG.mouse.y);
+		var mouseTile = grid.GetChunkPoint(mousePos);
 		info.text = ('Mouse X: ${mousePos.x} | Mouse Y: ${mousePos.y} \n') +
 					('Tile Y: ${mouseTile.y} | Tile X: ${mouseTile.x}');
+		info.x = player.x - 80;
+		info.y = player.y - 145;		
 		UnloadChunks();
 	}
 }

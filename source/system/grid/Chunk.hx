@@ -8,7 +8,11 @@ import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup;
 
 import system.helpers.Isometric;
+<<<<<<< HEAD
 import system.entities.Block;
+=======
+import system.constants.Map;
+>>>>>>> a4cb3f87736ae1bc766632748a38caa5efe6b4b4
 
 class Chunk extends FlxSpriteGroup {
     public var chunk_size:Int = 3;
@@ -23,9 +27,21 @@ class Chunk extends FlxSpriteGroup {
                 
                 var tile = new Block(x, y);
                 add(tile);
-                //add(tile.number);
+                add(tile.number);
             }
         }
+    }
+
+    public function GetTilePoint(position:FlxPoint):FlxPoint {
+        var newX = position.x;
+        var newY = position.y;
+
+        var screen:FlxPoint = new FlxPoint(0, 0);
+
+        screen.x = (newX / Map.BASE_TILE_HALF_HEIGHT + newY / Map.BASE_TILE_HALF_WIDTH) / 2;
+        screen.y = (newY / Map.BASE_TILE_HALF_WIDTH - (newX / Map.BASE_TILE_HALF_HEIGHT)) / 2;
+
+        return screen;
     }
 
 }
