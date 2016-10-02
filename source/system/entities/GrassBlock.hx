@@ -15,8 +15,8 @@ class GrassBlock implements BlockPattern extends FlxSprite {
     public var id:Int;
     public var type:BlockTypes;
     
-    public function new(cellx:Int, celly:Int) {
-        var _point = Isometric.TwoDToIso(new FlxPoint(cellx, celly));
+    public function new(cellx:Int, celly:Int, cellz:Int = 0) {
+        var _point = Isometric.TwoDToIso(new FlxPoint(cellx, celly), cellz);
 
         super(_point.x, _point.y);
         loadGraphic(AssetPaths.grass_cube__png);

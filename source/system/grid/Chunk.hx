@@ -7,9 +7,11 @@ import flixel.math.FlxPoint;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup;
 import flixel.math.FlxRandom;
+import flixel.util.FlxSort;
 
 import system.helpers.Isometric;
 import system.entities.Block;
+import system.entities.GrassBlock;
 import system.constants.Map;
 
 class Chunk extends FlxSpriteGroup {
@@ -19,15 +21,20 @@ class Chunk extends FlxSpriteGroup {
     public function new() {
         super();
         for (y in 0...chunk_size) {
-            var random = new FlxRandom().int(0, 5);
+            var random = new FlxRandom().int(1, 5);
             for (x in 0...chunk_size) {
                  
                 var coord = new FlxPoint(x, y);
                 var point = Isometric.TwoDToIso(coord);
                 
                 var tile = new Block(x, y);
-                tile.z = random;
+                
                 add(tile);
+                
+                for (z in 0...random) {
+                    var newGrass = new GrassBlock(x, y, z);
+                    add(newGrass);
+                }
                 //add(tile.number);
             }
         }

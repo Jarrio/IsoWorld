@@ -21,13 +21,13 @@ class Isometric {
         return(screen);
     }
 
-    static public function TwoDToIso(map:FlxPoint):FlxPoint{
+    static public function TwoDToIso(map:FlxPoint, z:Int = 0):FlxPoint{
         //var StartX:Float = (FlxG.width / 2) - 32;
         //var StartY:Float = 100;
         var screen:FlxPoint = new FlxPoint(0, 0);
 
         screen.x =  ((map.x - map.y) * 32);
-        screen.y =  ((map.x + map.y) * 16);         
+        screen.y =  ((map.x + map.y) * 16) - (z * 32);         
 
         return screen;
     }
