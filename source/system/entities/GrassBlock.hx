@@ -6,8 +6,9 @@ import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
-
+import flixel.util.FlxCollision;
 import system.helpers.Isometric;
+import flixel.FlxObject;
 
 class GrassBlock implements BlockPattern extends FlxSprite {
 
@@ -19,6 +20,8 @@ class GrassBlock implements BlockPattern extends FlxSprite {
         var _point = Isometric.TwoDToIso(new FlxPoint(cellx, celly), cellz);
 
         super(_point.x, _point.y);
-        loadGraphic(AssetPaths.grass_cube__png);
+        loadGraphic(AssetPaths.grass_cube_2__png);
+        this.allowCollisions = FlxObject.UP;
+        
     } 
 }

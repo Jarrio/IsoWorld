@@ -27,7 +27,7 @@ class GridState extends FlxState {
 
 	public var ChunkGroup:FlxSpriteGroup = new FlxSpriteGroup();
 	public var ChunkRadius:FlxLinkedList;
-
+	public var game_camera:FlxCamera;
 	
 	override public function create():Void { 
 		super.create();
@@ -47,37 +47,7 @@ class GridState extends FlxState {
 
 		add(grid.chunks);
 		add(player);
-		/*
-		var gblock11 = new GrassBlock(12, 6);
-		var gblock12 = new GrassBlock(12, 6, -1);
-		var gblock13 = new GrassBlock(12, 6, -2);
-		var gblock14 = new GrassBlock(12, 6, -3);
-		add(gblock14);
-		add(gblock13);
-		add(gblock12);
-		add(gblock11);
-		
 
-
-		var gblock = new GrassBlock(-1, -1);
-		var gblock2 = new GrassBlock(-1, -1, 1);
-		var gblock3 = new GrassBlock(-1, -1, 2);
-		var gblock4 = new GrassBlock(-1, -1, 3);
-		var gblock5 = new GrassBlock(-1, -1, 4);
-		var gblock6 = new GrassBlock(-1, 2, 0);
-		var gblock7 = new GrassBlock(-1, 6);
-		var gblock8 = new GrassBlock(-1, 6, 1);
-		var gblock9 = new GrassBlock(-1, 6, 2);
-		
-		add(gblock);
-		add(gblock2);
-		add(gblock3);
-		add(gblock4);
-		add(gblock5);
-		add(gblock6);
-		add(gblock7);
-		add(gblock8);
-		add(gblock9);*/
 
 	}
 	
@@ -99,9 +69,9 @@ class GridState extends FlxState {
 		super.update(elapsed);
 
 		if (FlxG.keys.justPressed.PLUS) {
-			camera.zoom += 0.5;
+			game_camera.zoom += 1;
 		} else if (FlxG.keys.justPressed.MINUS) {
-			camera.zoom -= 0.5;
+			game_camera.zoom -= 1;
 		}
 
 

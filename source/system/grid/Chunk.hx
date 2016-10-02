@@ -21,7 +21,8 @@ class Chunk extends FlxSpriteGroup {
     public function new() {
         super();
         for (y in 0...chunk_size) {
-            var random = new FlxRandom().int(1, 5);
+            var random = new FlxRandom(19764374);
+            
             for (x in 0...chunk_size) {
                  
                 var coord = new FlxPoint(x, y);
@@ -30,14 +31,14 @@ class Chunk extends FlxSpriteGroup {
                 var tile = new Block(x, y);
                 
                 add(tile);
-                
-                for (z in 0...random) {
+                for (z in 0...random.int(1, 5)) {
                     var newGrass = new GrassBlock(x, y, z);
                     add(newGrass);
                 }
                 //add(tile.number);
             }
         }
+        
     }
 
     public function GetTilePoint(position:FlxPoint):FlxPoint {

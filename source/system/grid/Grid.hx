@@ -22,7 +22,8 @@ class Grid {
 
     public function new () {
         map_camera = new FlxCamera(100, 50, 400, 400);
-        map_camera.bgColor = FlxColor.BLUE;
+        map_camera.bgColor = FlxColor.BLACK;
+         
         chunks.camera = map_camera;
         
     }
