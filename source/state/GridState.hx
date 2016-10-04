@@ -42,8 +42,7 @@ class GridState extends FlxState {
 		
 
 		info = new FlxText(400, 20);
-		info.color = FlxColor.WHITE;
-		add(info);
+		info.color = FlxColor.WHITE;		
 
 		grid.map_camera.follow(player, FlxCameraFollowStyle.NO_DEAD_ZONE);
 		ObjectGroup.camera = grid.map_camera;
@@ -54,6 +53,23 @@ class GridState extends FlxState {
 		
 	}
 	
+	//New Method
+	public function UpdateModels() {
+		for (i in 0...ObjectGroup.length) {
+			var sprite:Basic = ObjectGroup.members[i];
+			sprite.MinX = sprite.IsoX + sprite.MinXRelative;
+			sprite.MaxX = sprite.IsoX + sprite.MaxXRelative;
+			
+			sprite.MinY = sprite.IsoY + sprite.MinYRelative;
+			sprite.MaxY = sprite.IsoY + sprite.MaxYRelative;
+
+			sprite.MinZ = sprite.IsoX + sprite.MinZRelative;
+			sprite.MaxZ = sprite.IsoX + sprite.MaxZRelative;
+		}
+	} 
+
+//https://mazebert.com/2013/04/18/isometric-depth-sorting/
+
 	public function CheckLocations() {
 		ObjectGroup.add(player);
 		for (i in 0...grid.chunks.length) {
@@ -61,7 +77,7 @@ class GridState extends FlxState {
 				ObjectGroup.add(grid.chunks[i].blocks[j]);
 			}
 		}
-		
+		add(info);
 	}
 
 	private var distance = 128;
@@ -106,7 +122,8 @@ class GridState extends FlxState {
 		info.x = player.x - 80;
 		info.y = player.y - 145;		
 		//UnloadChunks();
-		ObjectGroup.sort(SortBy3d, FlxSort.ASCENDING);
+		
+		ObjectGroup.sort(SortBy3d, FlxSort.DESCENDING);
 	}
 
 	private function SortBy3d(order:Int, a:Basic, b:Basic):Int {
@@ -114,8 +131,9 @@ class GridState extends FlxState {
 		var b_sum = (b.z);	
 		
 		if (a_sum == b_sum) {
-			return (a_sum != 0) ? 0 : Math.floor(a_sum);
+			return 0;
 		}
+		
 		if (a_sum >= b_sum) return Math.floor(a_sum);
 		
 		return -1;

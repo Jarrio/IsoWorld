@@ -21,11 +21,13 @@ class GrassBlock implements BlockPattern extends Basic {
     public function new(cellx:Int, celly:Int, cellz:Int = 0, ?chunkpoint:FlxPoint) {
         var _point = Isometric.TwoDToIso(new FlxPoint(cellx, celly), cellz);
         super(_point.x, _point.y, AssetPaths.green_cube__png);
-        z = cellz;
+        
         this.allowCollisions = FlxObject.UP;
         blocktext = 'x: ${cellx} - y: ${celly} - z: ${cellz}';
         var oldpoint = Isometric.IsoTo2D(new FlxPoint(this.x, this.y), z);
         
+
+        set_iso_coords(cellx, celly, cellz);
         //trace('ox: ${cellx} oy: ${celly} ± nx: ${oldpoint.x} ny: ${oldpoint.y} ± gx: ${this.x} gy: ${this.y}');
     } 
 
