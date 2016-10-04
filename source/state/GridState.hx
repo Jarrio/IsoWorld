@@ -94,7 +94,7 @@ class GridState extends FlxState {
 		} else if (FlxG.keys.justPressed.MINUS) {
 			camera.zoom -= 1;
 		}
-		FlxG.watch.addQuick("Player Z: ", 'x: ${player.x} - y: ${player.y} - z: ${player.z}');
+		FlxG.watch.addQuick("Player: ", 'x: ${player.x} - y: ${player.y} - z: ${player.z}');
 		FlxG.watch.addQuick("Player Depth: ", player.depth);
 		
 

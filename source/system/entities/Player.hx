@@ -14,11 +14,16 @@ import system.helpers.Isometric;
 
 class Player extends Basic {
 
-    public var Speed:Int = 16;
+    public var Speed:Int = 1;
     public var Movekey:Bool = false;
+
+    public var PointX:Int = 4;
+    public var PointY:Int = 4;
+
+
     
     public function new(?x:Float, ?y:Float, ?graphic:String) {        
-        var newPoint = Isometric.TwoDToIso(new FlxPoint(4, 4));          
+        var newPoint = Isometric.TwoDToIso(new FlxPoint(PointX, PointY));          
         type = BasicTypes.Player;
         x = newPoint.x;
         y = newPoint.y;
@@ -33,16 +38,16 @@ class Player extends Basic {
         var point = Isometric.TwoDToIso(Isometric.IsoTo2D(new FlxPoint(x, y)));
 
         if (FlxG.keys.anyJustPressed(['W', 'Up'])) {
-            newY -= Speed;
+            PointY -= Speed;
             Movekey = true;
         } else if (FlxG.keys.anyJustPressed(['S', 'Down'])) {
-            newY += Speed;
+            PointY += Speed;
             Movekey = true;
         } else if (FlxG.keys.anyJustPressed(['A', 'Left'])) {
-            newX -= Speed;
+            PointX -= Speed;
             Movekey = true;
         } else if (FlxG.keys.anyJustPressed(['D', 'Right'])) {
-            newX += Speed;
+            PointX += Speed;
             Movekey = true;
         } else if (FlxG.keys.justPressed.ZERO) {
             z += 1;
@@ -51,14 +56,16 @@ class Player extends Basic {
         }
 
         if (Movekey) {            
-            var movePoint = MovePlayer(newX, newY);
+            var movePoint = Isometric.TwoDToIso(new FlxPoint(PointX, PointY),z);
             x = movePoint.x;
             y = movePoint.y;
             Movekey = false;
             //FlxG.watch.addQuick("IsoPoint: ", 'X: ${isoPoint.x} Y: ${isoPoint.y}');
         }
-
-        depth = x + y + z;
+        //var depth_point = Isometric.IsoTo2D(new FlxPoint(x, y));
+        //var depth_point = Isometric.IsoTo2D(new FlxPoint(x, y));
+        //FlxG.watch.addQuick("Depth Point: ", depth_point.toString());
+        depth = PointX + PointY + z;
         
     } 
 
