@@ -36,7 +36,8 @@ class GridState extends FlxState {
 		super.create();
 		grid = new Grid();
 		grid.LoadChunks();
-		player = new Player();
+		player = new Player(0, 0);
+		player.camera = grid.map_camera;
 		
 		
 
@@ -56,8 +57,8 @@ class GridState extends FlxState {
 	public function CheckLocations() {
 		ObjectGroup.add(player);
 		for (i in 0...grid.chunks.length) {
-			for (j in 0...grid.chunks[i].members.length) {
-				ObjectGroup.add(grid.chunks[i].members[j]);
+			for (j in 0...grid.chunks[i].blocks.length) {
+				ObjectGroup.add(grid.chunks[i].blocks[j]);
 			}
 		}
 		
@@ -105,12 +106,12 @@ class GridState extends FlxState {
 		info.x = player.x - 80;
 		info.y = player.y - 145;		
 		//UnloadChunks();
-		//ObjectGroup.sort(SortBy3d, FlxSort.DESCENDING);
+		ObjectGroup.sort(SortBy3d, FlxSort.ASCENDING);
 	}
 
 	private function SortBy3d(order:Int, a:Basic, b:Basic):Int {
-		var a_sum = (a.depth);
-		var b_sum = (b.depth);	
+		var a_sum = (a.z);
+		var b_sum = (b.z);	
 		
 		if (a_sum == b_sum) {
 			return (a_sum != 0) ? 0 : Math.floor(a_sum);

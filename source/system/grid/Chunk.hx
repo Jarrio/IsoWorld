@@ -15,22 +15,23 @@ import system.entities.Block;
 import system.entities.Basic;
 import system.entities.GrassBlock;
 import system.constants.Map;
+import haxe.ds.Vector;
 
 class Chunk extends FlxTypedSpriteGroup<Basic>{
     public var chunk_size:Int = 3;
-    public var blocks:Array<Basic> = new Array<Basic>(); 
+    public var blocks:Array<Basic> = new Array<Basic>();
+    
 
-    public function new(x:Float, y:Float, ?graphic = null) {
-        super(x, y);
-        for (y in 0...chunk_size) {
-            var random = new FlxRandom().int(1, 2);
-            for (x in 0...chunk_size) {
-                 
-                var coord = new FlxPoint(x, y);
-                var point = Isometric.TwoDToIso(coord);
+    public function new(x:Int, y:Int, ?graphic = null) {
+        var chunk_point = Isometric.Chunk2dToIso(new FlxPoint(x, y));               
+        super(chunk_point.x, chunk_point.y);
+
+        for (iy in 0...(chunk_size)) {
+            var random = new FlxRandom().int(1,2);
+            for (ix in 0...(chunk_size)) {
                 
-                for (z in 0...random) {
-                    var newGrass = new GrassBlock(x, y, z);
+                for (iz in 0...random) {
+                    var newGrass = new GrassBlock(ix, iy, iz, chunk_point);
                     blocks.push(newGrass);
                     add(newGrass);
                 }

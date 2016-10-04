@@ -20,6 +20,7 @@ class Grid {
     public var chunkx:Int = 200;
     public var chunky:Int = 100;
 
+
     public function new () {
         map_camera = new FlxCamera(100, 50, 400, 400);
         map_camera.bgColor = FlxColor.BLUE;
@@ -33,23 +34,8 @@ class Grid {
 
         for (y in 0...chunk_distance_y) {
             for (x in 0...chunk_distance_x) {               
-
-
-
-                var chunk_coords = Isometric.Chunk2dToIso(new FlxPoint(x, y));                
+                                
                 var new_chunk = new Chunk(x, y);
-
-                var chunk_outline = new FlxSprite(0, 0);                
-                chunk_outline.makeGraphic(64, 64, FlxColor.TRANSPARENT);                
-                var lineStyle:LineStyle = { color: FlxColor.RED, thickness: 1 };
-                chunk_outline.drawRect(0, 0, 64, 64, FlxColor.TRANSPARENT,  lineStyle);
-                chunk_outline.angle = 45;
-                
-                chunk_outline.x = chunk_coords.x;
-                chunk_outline.y = chunk_coords.y;
-
-                new_chunk.x = chunk_coords.x;
-                new_chunk.y = chunk_coords.y;
 
                 chunks.push(new_chunk);
                 //chunks.add(chunk_outline);
