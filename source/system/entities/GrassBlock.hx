@@ -33,9 +33,11 @@ class GrassBlock implements BlockPattern extends Basic {
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
         if (FlxG.mouse.overlaps(this)) {
-            
+            color = FlxColor.RED;
             FlxG.watch.addQuick("Block:", blocktext);
             FlxG.watch.addQuick("Block Depth:", depth);
+        } else {
+            color = FlxColor.WHITE;
         }
         
     }

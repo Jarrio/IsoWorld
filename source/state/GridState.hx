@@ -115,7 +115,7 @@ class GridState extends FlxState {
 		if (a_sum == b_sum) {
 			return (a_sum != 0) ? 0 : Math.floor(a_sum);
 		}
-		if (a_sum > b_sum) return Math.floor(a_sum);
+		if (a_sum >= b_sum) return Math.floor(a_sum);
 		
 		return -1;
 	}
