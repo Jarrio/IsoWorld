@@ -23,7 +23,7 @@ class Chunk extends FlxTypedSpriteGroup<Basic>{
     public function new(x:Float, y:Float, ?graphic = null) {
         super(x, y);
         for (y in 0...chunk_size) {
-            var random = new FlxRandom().int(1, 5);
+            var random = new FlxRandom().int(1, 2);
             for (x in 0...chunk_size) {
                  
                 var coord = new FlxPoint(x, y);

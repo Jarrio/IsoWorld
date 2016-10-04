@@ -105,7 +105,7 @@ class GridState extends FlxState {
 		info.x = player.x - 80;
 		info.y = player.y - 145;		
 		//UnloadChunks();
-		ObjectGroup.sort(SortBy3d, FlxSort.DESCENDING);
+		//ObjectGroup.sort(SortBy3d, FlxSort.DESCENDING);
 	}
 
 	private function SortBy3d(order:Int, a:Basic, b:Basic):Int {

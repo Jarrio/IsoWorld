@@ -22,7 +22,7 @@ class GrassBlock implements BlockPattern extends Basic {
         type = BasicTypes.Block;
         z = cellz;
 
-        super(_point.x, _point.y, AssetPaths.grass_cube_2__png);
+        super(_point.x, _point.y, AssetPaths.green_cube__png);
         depth = x + y + z;
         this.allowCollisions = FlxObject.UP;
         blocktext = 'x: ${x} - y: ${y} - z: ${z}';
