@@ -19,13 +19,8 @@ class TestState extends FlxState {
 	
 	override public function create():Void {
 		super.create();
+		this.bgColor = FlxColor.fromString("#777777");
         player = new Player();
-		player.visible = true;
-
-        floor = new FlxSprite(100, 400);
-		floor.loadGraphic(AssetPaths.test_slope__png);
-		floor.immovable = true;
-		add(floor);
 		add(player);
 
 
@@ -38,8 +33,5 @@ class TestState extends FlxState {
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (FlxG.pixelPerfectOverlap(floor, player)) {
-			FlxG.collide(floor, player);
-		}
 	}
 }

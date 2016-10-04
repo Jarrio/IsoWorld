@@ -8,17 +8,15 @@ import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 
 import system.helpers.Isometric;
+import system.entities.Basic;
 
-class Block implements BlockPattern extends FlxSprite {
+class Block implements BlockPattern extends Basic {
 
-    public var z:Int;
-    public var id:Int;
-    public var type:BlockTypes;
+    public var block_type:BlockTypes;
     
-    public function new(cellx:Int, celly:Int) {
+    public function new(cellx:Int, celly:Int, graphic:String = AssetPaths.base_cube__png) {
         var _point = Isometric.TwoDToIso(new FlxPoint(cellx, celly));
-
-        super(_point.x, _point.y);
-        loadGraphic(AssetPaths.base_cube__png);
+        
+        super(_point.x, _point.y, graphic);
     } 
 }

@@ -16,21 +16,19 @@ import system.constants.Map;
 class Grid {
     public var chunk_render_distance:Int = 2;
     public var map_camera:FlxCamera;
-	public var chunks:FlxTypedSpriteGroup<Chunk> = new FlxTypedSpriteGroup<Chunk>();    
+	public var chunks:Array<Chunk> = new Array<Chunk>();    
     public var chunkx:Int = 200;
     public var chunky:Int = 100;
 
     public function new () {
         map_camera = new FlxCamera(100, 50, 400, 400);
-        map_camera.bgColor = FlxColor.BLACK;
-         
-        chunks.camera = map_camera;
+        map_camera.bgColor = FlxColor.BLUE;
         
     }
 
     public function LoadChunks() {
-        var chunk_distance_x = Math.floor(map_camera.width / 64);
-        var chunk_distance_y = Math.floor(map_camera.height / 32);
+        var chunk_distance_x = Math.floor(map_camera.width / 128);
+        var chunk_distance_y = Math.floor(map_camera.height / 64);
         FlxG.log.notice('x: ${chunk_distance_x} y: ${chunk_distance_y}');
 
         for (y in 0...chunk_distance_y) {
@@ -39,7 +37,7 @@ class Grid {
 
 
                 var chunk_coords = Isometric.Chunk2dToIso(new FlxPoint(x, y));                
-                var new_chunk = new Chunk();
+                var new_chunk = new Chunk(x, y);
 
                 var chunk_outline = new FlxSprite(0, 0);                
                 chunk_outline.makeGraphic(64, 64, FlxColor.TRANSPARENT);                
@@ -53,7 +51,7 @@ class Grid {
                 new_chunk.x = chunk_coords.x;
                 new_chunk.y = chunk_coords.y;
 
-                chunks.add(new_chunk);
+                chunks.push(new_chunk);
                 //chunks.add(chunk_outline);
             }
         }
