@@ -66,6 +66,22 @@ class GridState extends FlxState {
 			sprite.MinZ = sprite.IsoX + sprite.MinZRelative;
 			sprite.MaxZ = sprite.IsoX + sprite.MaxZRelative;
 		}
+
+		var a:Basic;
+		var b:Basic;
+		grid.map_camera.bu
+		var sprites_length:Int = ObjectGroup.length;
+		var behind_index:Int;
+		for (i in 0...sprites_length) {
+			a = ObjectGroup.members[i];
+			behind_index = 0;
+			for (j in 0...sprites_length) {
+				if (i != j) {
+					b = ObjectGroup.members[j];
+					if ((b.MinX < a.MaxX) && (b.MinX < a.MaxY) && )
+				}
+			}
+		}
 	} 
 
 //https://mazebert.com/2013/04/18/isometric-depth-sorting/
