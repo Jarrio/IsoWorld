@@ -26,6 +26,7 @@ class Isometric {
         //screen.y =  ((map.y + map.x) * Map.BASE_TILE_HALF_HEIGHT);        
 
         screen.x =  ((map.x - map.y) * Map.BASE_TILE_HALF_WIDTH);
+        //FlxG.log.notice(z * Map.BASE_TILE_HALF_HEIGHT);
         screen.y =  ((map.y + map.x - (z * Map.BASE_TILE_HALF_HEIGHT)) * Map.BASE_TILE_HALF_HEIGHT); 
         return screen;
     }

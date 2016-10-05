@@ -19,7 +19,7 @@ class Player extends Basic {
 
     public var PointX:Int = 0;
     public var PointY:Int = 0;
-    public var PointZ:Int = 2;
+    public var PointZ:Int = 0;
 
 
     
@@ -33,7 +33,6 @@ class Player extends Basic {
         y = newPoint.y;        
         
         super(x, y, AssetPaths.grass_cube_2__png);
-        var _reverse = Isometric.IsoTo2D(new FlxPoint(x, y), PointZ);
         set_iso_coords(newPoint.x, newPoint.y, PointZ);    
 
         color = FlxColor.BLACK;
@@ -49,8 +48,7 @@ class Player extends Basic {
 
     override public function update(elapsed:Float):Void {
         var newY = y;
-        var newX = x;
-        var point = Isometric.TwoDToIso(Isometric.IsoTo2D(new FlxPoint(x, y), z));
+        var newX = x;        
 
         if (FlxG.keys.anyJustPressed(['W', 'Up'])) {
             PointY -= Speed;

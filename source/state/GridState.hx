@@ -40,13 +40,14 @@ class GridState extends FlxState {
 		grid.LoadChunks();
 		player = new Player(0, 0);
 		player.camera = grid.map_camera;
-		
+		FlxG.debugger.visible = true;
 		
 
 		info = new FlxText(400, 20);
 		info.color = FlxColor.WHITE;		
 
-		grid.map_camera.follow(player, FlxCameraFollowStyle.NO_DEAD_ZONE);
+		grid.map_camera.follow(player, FlxCameraFollowStyle.TOPDOWN_TIGHT);
+		grid.map_camera.followLerp = 0.5;
 		ObjectGroup.camera = grid.map_camera;
 		FlxG.cameras.reset(grid.map_camera);
 		add(ObjectGroup);
