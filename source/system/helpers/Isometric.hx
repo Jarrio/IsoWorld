@@ -10,9 +10,10 @@ class Isometric {
         
         var newX = map.x / Map.BASE_TILE_HALF_WIDTH;
         var newY = map.y / Map.BASE_TILE_HALF_HEIGHT;
+        var newZ = z * Map.BASE_TILE_HALF_HEIGHT;
 
         screen.x = (newX + newY) / 2;                              
-        screen.y = (newY - newX) / 2;                              
+        screen.y = (newY - newX + newZ) / 2;                              
         return(screen);
     }
 
@@ -21,9 +22,11 @@ class Isometric {
         //var StartY:Float = 100;
         var screen:FlxPoint = new FlxPoint(0, 0);
 
-        screen.x =  ((map.x - map.y) * Map.BASE_TILE_HALF_WIDTH);
-        screen.y =  ((map.y + map.x) * Map.BASE_TILE_HALF_HEIGHT);        
+        //screen.x =  ((map.x - map.y) * Map.BASE_TILE_HALF_WIDTH);
+        //screen.y =  ((map.y + map.x) * Map.BASE_TILE_HALF_HEIGHT);        
 
+        screen.x =  ((map.x - map.y) * Map.BASE_TILE_HALF_WIDTH);
+        screen.y =  ((map.y + map.x - (z * Map.BASE_TILE_HALF_HEIGHT)) * Map.BASE_TILE_HALF_HEIGHT); 
         return screen;
     }
 

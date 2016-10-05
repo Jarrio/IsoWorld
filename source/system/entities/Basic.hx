@@ -11,34 +11,30 @@ class Basic extends FlxSprite {
     public var depth:Float;
 
     //New Implementation
-    public var IsoX:Int;
-    public var IsoY:Int;
-    public var IsoZ:Int;
+    public var IsoX:Float;
+    public var IsoY:Float;
+    public var IsoZ:Float;
 
-    public var MinX:Int;
-    public var MaxX:Int;
-    public var MinY:Int;
-    public var MaxY:Int;
-    public var MinZ:Int;
-    public var MaxZ:Int;
+    public var MinX:Float;
+    public var MaxX:Float;
+    public var MinY:Float;
+    public var MaxY:Float;
+    public var MinZ:Float;
+    public var MaxZ:Float;
     
-    public var MinXRelative:Int;
-    public var MaxXRelative:Int;
-    public var MinYRelative:Int;
-    public var MaxYRelative:Int;
-    public var MinZRelative:Int;
-    public var MaxZRelative:Int;
+    public var MinXRelative:Float;
+    public var MaxXRelative:Float;
+    public var MinYRelative:Float;
+    public var MaxYRelative:Float;
+    public var MinZRelative:Float;
+    public var MaxZRelative:Float;
 
     //Sorting Variables
     public var IsoDepth:Int;
-    public var IsoSpritesBehind:Vector<Basic>;
+    public var IsoSpritesBehind:Array<Basic> = new Array<Basic>();
     public var IsoVisitedFlag:Int;
 
-    public function new(x:Float, y:Float, graphic:String) {
-        super(x, y, graphic);
-    }
-
-    public function set_iso_coords(x:Int, y:Int, z:Int) {
+    public function set_iso_coords(x:Float, y:Float, z:Float) {
         this.IsoX = x;
         this.IsoY = y;
         this.IsoZ = z;

@@ -12,6 +12,8 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 
+import system.constants.Map;
+
 import system.grid.Grid;
 import system.entities.Player;
 import system.entities.GrassBlock;
@@ -49,27 +51,40 @@ class GridState extends FlxState {
 		FlxG.cameras.reset(grid.map_camera);
 		add(ObjectGroup);
 		
-		CheckLocations();
+		LoadGroup();
 		
 	}
 	
+	public function LoadGroup() {
+
+		for (i in 0...grid.chunks.length) {
+			for (j in 0...grid.chunks[i].members.length) {
+				ObjectGroup.add(grid.chunks[i].members[j]);
+			}
+		}
+		ObjectGroup.add(player);		
+		add(info);
+	}	
 	//New Method
 	public function UpdateModels() {
 		for (i in 0...ObjectGroup.length) {
 			var sprite:Basic = ObjectGroup.members[i];
+        	//sprite.x = ((sprite.IsoX - sprite.IsoY) * Map.BASE_TILE_HALF_WIDTH);
+        	//sprite.y = ((sprite.IsoY + sprite.IsoX - (sprite.IsoZ * Map.BASE_TILE_HALF_HEIGHT)) * Map.BASE_TILE_HALF_HEIGHT); 
+			
 			sprite.MinX = sprite.IsoX + sprite.MinXRelative;
 			sprite.MaxX = sprite.IsoX + sprite.MaxXRelative;
 			
 			sprite.MinY = sprite.IsoY + sprite.MinYRelative;
 			sprite.MaxY = sprite.IsoY + sprite.MaxYRelative;
 
-			sprite.MinZ = sprite.IsoX + sprite.MinZRelative;
-			sprite.MaxZ = sprite.IsoX + sprite.MaxZRelative;
+			sprite.MinZ = sprite.IsoZ + sprite.MinZRelative;
+			sprite.MaxZ = sprite.IsoZ + sprite.MaxZRelative;
 		}
 
 		var a:Basic;
 		var b:Basic;
-		grid.map_camera.bu
+		
 		var sprites_length:Int = ObjectGroup.length;
 		var behind_index:Int;
 		for (i in 0...sprites_length) {
@@ -78,24 +93,79 @@ class GridState extends FlxState {
 			for (j in 0...sprites_length) {
 				if (i != j) {
 					b = ObjectGroup.members[j];
-					if ((b.MinX < a.MaxX) && (b.MinX < a.MaxY) && )
+					if ((b.MinX < a.MaxX) && (b.MinX < a.MaxY) && (b.MinZ < a.MaxZ)) {
+						a.IsoSpritesBehind[behind_index++] = b;
+					}
 				}
 			}
+			a.IsoVisitedFlag = 0;
 		}
-	} 
+		
+		for (i in 0...sprites_length) {
+			visitNode(ObjectGroup.members[i]);
+			//if (i == sprites_length-1) _sortDepth = 0;
+		}
 
+		
+	}
+	
+	public var _sortDepth = 0;
+
+	private function visitNode(sprite:Basic):Void {
+		if (sprite.IsoVisitedFlag == 0) {
+			sprite.IsoVisitedFlag = 1;
+
+			var spritesBehindLength:Int = sprite.IsoSpritesBehind.length;
+			for (i in 0...spritesBehindLength) {
+				if (sprite.IsoSpritesBehind[i] == null) {
+					break;
+				} else {
+					visitNode(sprite.IsoSpritesBehind[i]);
+					sprite.IsoSpritesBehind[i] = null;
+				}
+			}
+
+			sprite.IsoDepth = _sortDepth++;
+		}
+		
+	}
 //https://mazebert.com/2013/04/18/isometric-depth-sorting/
 
-	public function CheckLocations() {
-		ObjectGroup.add(player);
-		for (i in 0...grid.chunks.length) {
-			for (j in 0...grid.chunks[i].blocks.length) {
-				ObjectGroup.add(grid.chunks[i].blocks[j]);
-			}
+
+
+
+	override public function update(elapsed:Float):Void {
+		UpdateModels();		
+		ObjectGroup.sort(SortBy3d);		
+
+
+		if (FlxG.keys.justPressed.PLUS) {
+			camera.zoom += 1;
+		} else if (FlxG.keys.justPressed.MINUS) {
+			camera.zoom -= 1;
 		}
-		add(info);
+
+		var mousePos = new FlxPoint(FlxG.mouse.x, FlxG.mouse.y);
+		var mouseTile = grid.GetChunkPoint(mousePos);
+		info.text = ('Mouse X: ${mousePos.x} | Mouse Y: ${mousePos.y} \n') +
+					('Tile Y: ${mouseTile.y} | Tile X: ${mouseTile.x}');
+		info.x = player.x - 80;
+		info.y = player.y - 145;		
+
+		super.update(elapsed);
 	}
 
+	private function SortBy3d(order:Int, a:Basic, b:Basic):Int {
+		if (a.IsoDepth > b.IsoDepth) {
+			return order;
+		} else if (a.IsoDepth < b.IsoDepth) {
+			return -order;
+		}
+
+		return 0;
+	}
+
+	
 	private var distance = 128;
 	/*
 	public function UnloadChunks() {
@@ -118,40 +188,4 @@ class GridState extends FlxState {
 			}
 		}
 	}*/
-
-	override public function update(elapsed:Float):Void {
-		super.update(elapsed);
-
-		if (FlxG.keys.justPressed.PLUS) {
-			camera.zoom += 1;
-		} else if (FlxG.keys.justPressed.MINUS) {
-			camera.zoom -= 1;
-		}
-		FlxG.watch.addQuick("Player: ", 'x: ${player.x} - y: ${player.y} - z: ${player.z}');
-		FlxG.watch.addQuick("Player Depth: ", player.depth);
-		
-
-		var mousePos = new FlxPoint(FlxG.mouse.x, FlxG.mouse.y);
-		var mouseTile = grid.GetChunkPoint(mousePos);
-		info.text = ('Mouse X: ${mousePos.x} | Mouse Y: ${mousePos.y} \n') +
-					('Tile Y: ${mouseTile.y} | Tile X: ${mouseTile.x}');
-		info.x = player.x - 80;
-		info.y = player.y - 145;		
-		//UnloadChunks();
-		
-		ObjectGroup.sort(SortBy3d, FlxSort.DESCENDING);
-	}
-
-	private function SortBy3d(order:Int, a:Basic, b:Basic):Int {
-		var a_sum = (a.z);
-		var b_sum = (b.z);	
-		
-		if (a_sum == b_sum) {
-			return 0;
-		}
-		
-		if (a_sum >= b_sum) return Math.floor(a_sum);
-		
-		return -1;
-	}
 }

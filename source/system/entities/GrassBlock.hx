@@ -17,17 +17,27 @@ class GrassBlock implements BlockPattern extends Basic {
     public var block_type:BlockTypes;
     public var blocktext:String = "";
     public var startup:Bool = true;
+    
+    
 
-    public function new(cellx:Int, celly:Int, cellz:Int = 0, ?chunkpoint:FlxPoint) {
+
+    public function new(cellx:Int, celly:Int, cellz:Int) {  
         var _point = Isometric.TwoDToIso(new FlxPoint(cellx, celly), cellz);
         super(_point.x, _point.y, AssetPaths.green_cube__png);
         
-        this.allowCollisions = FlxObject.UP;
         blocktext = 'x: ${cellx} - y: ${celly} - z: ${cellz}';
-        var oldpoint = Isometric.IsoTo2D(new FlxPoint(this.x, this.y), z);
-        
 
-        set_iso_coords(cellx, celly, cellz);
+        var _reverse = Isometric.IsoTo2D(new FlxPoint(x, y), cellz);
+        set_iso_coords(_reverse.x, _reverse.y, cellz);      
+        
+        MinXRelative = -32;
+        MaxXRelative = 32;
+         
+        MinYRelative = -32;
+        MaxYRelative = 32;
+
+        MinZRelative = -32;
+        MaxZRelative = 32;             
         //trace('ox: ${cellx} oy: ${celly} ± nx: ${oldpoint.x} ny: ${oldpoint.y} ± gx: ${this.x} gy: ${this.y}');
     } 
 
@@ -39,7 +49,7 @@ class GrassBlock implements BlockPattern extends Basic {
         if (FlxG.mouse.overlaps(this)) {
             color = FlxColor.RED;
             FlxG.watch.addQuick("Block:", blocktext);
-            FlxG.watch.addQuick("Block Depth:", depth);
+            FlxG.watch.addQuick("Block Depth:", IsoDepth);
             FlxG.watch.addQuick("Block Axis: ", 'x: ${x} - y: ${y} - z: ${z}');            
         } else {
             color = FlxColor.WHITE;

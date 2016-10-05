@@ -27,11 +27,11 @@ class Chunk extends FlxTypedSpriteGroup<Basic>{
         super(chunk_point.x, chunk_point.y);
 
         for (iy in 0...(chunk_size)) {
-            var random = new FlxRandom().int(1,2);
+            var random = new FlxRandom().int(1,3);
             for (ix in 0...(chunk_size)) {
                 
                 for (iz in 0...random) {
-                    var newGrass = new GrassBlock(ix, iy, iz, chunk_point);
+                    var newGrass = new GrassBlock(ix, iy, iz);
                     blocks.push(newGrass);
                     add(newGrass);
                 }
