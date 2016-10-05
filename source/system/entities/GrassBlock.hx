@@ -28,7 +28,7 @@ class GrassBlock implements BlockPattern extends Basic {
         blocktext = 'x: ${cellx} - y: ${celly} - z: ${cellz}';
 
         var _reverse = Isometric.IsoTo2D(new FlxPoint(x, y), cellz);
-        set_iso_coords(_reverse.x, _reverse.y, cellz);      
+        set_iso_coords(_point.x, _point.y, cellz);      
         
         MinXRelative = -32;
         MaxXRelative = 32;
@@ -45,7 +45,7 @@ class GrassBlock implements BlockPattern extends Basic {
 
     override public function update(elapsed:Float):Void {
         super.update(elapsed);
-        if (startup) depth = Math.floor(x+y+z); startup = false;
+        //if (startup) depth = Math.floor(x+y+IsoZ); startup = false;
         if (FlxG.mouse.overlaps(this)) {
             color = FlxColor.RED;
             FlxG.watch.addQuick("Block:", blocktext);

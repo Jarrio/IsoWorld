@@ -32,11 +32,11 @@ class Basic extends FlxSprite {
     //Sorting Variables
     public var IsoDepth:Int;
     public var IsoSpritesBehind:Array<Basic> = new Array<Basic>();
-    public var IsoVisitedFlag:Int;
+    public var IsoVisitedFlag:Int = 0;
 
     public function set_iso_coords(x:Float, y:Float, z:Float) {
         this.IsoX = x;
         this.IsoY = y;
-        this.IsoZ = z;
+        this.IsoZ = z * 16;
     }
 }

@@ -56,13 +56,13 @@ class GridState extends FlxState {
 	}
 	
 	public function LoadGroup() {
-
+		ObjectGroup.add(player);		
 		for (i in 0...grid.chunks.length) {
 			for (j in 0...grid.chunks[i].members.length) {
 				ObjectGroup.add(grid.chunks[i].members[j]);
 			}
 		}
-		ObjectGroup.add(player);		
+		
 		add(info);
 	}	
 	//New Method
@@ -76,7 +76,7 @@ class GridState extends FlxState {
 			sprite.MaxX = sprite.IsoX + sprite.MaxXRelative;
 			
 			sprite.MinY = sprite.IsoY + sprite.MinYRelative;
-			sprite.MaxY = sprite.IsoY + sprite.MaxYRelative;
+ 			sprite.MaxY = sprite.IsoY + sprite.MaxYRelative;
 
 			sprite.MinZ = sprite.IsoZ + sprite.MinZRelative;
 			sprite.MaxZ = sprite.IsoZ + sprite.MaxZRelative;
@@ -98,12 +98,12 @@ class GridState extends FlxState {
 					}
 				}
 			}
-			a.IsoVisitedFlag = 0;
+			a.IsoVisitedFlag = -1;
 		}
 		
 		for (i in 0...sprites_length) {
 			visitNode(ObjectGroup.members[i]);
-			//if (i == sprites_length-1) _sortDepth = 0;
+			if (i == sprites_length-1) _sortDepth = 0;
 		}
 
 		
@@ -112,7 +112,7 @@ class GridState extends FlxState {
 	public var _sortDepth = 0;
 
 	private function visitNode(sprite:Basic):Void {
-		if (sprite.IsoVisitedFlag == 0) {
+		if (sprite.IsoVisitedFlag == -1) {
 			sprite.IsoVisitedFlag = 1;
 
 			var spritesBehindLength:Int = sprite.IsoSpritesBehind.length;
@@ -136,7 +136,7 @@ class GridState extends FlxState {
 
 	override public function update(elapsed:Float):Void {
 		UpdateModels();		
-		ObjectGroup.sort(SortBy3d);		
+		ObjectGroup.sort(SortBy3d, FlxSort.DESCENDING);		
 
 
 		if (FlxG.keys.justPressed.PLUS) {

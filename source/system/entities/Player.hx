@@ -30,12 +30,11 @@ class Player extends Basic {
         var newPoint = Isometric.TwoDToIso(new FlxPoint(PointX, PointY), PointZ);          
         type = BasicTypes.Player;
         x = newPoint.x;
-        y = newPoint.y;
-        IsoZ = PointZ;
+        y = newPoint.y;        
         
         super(x, y, AssetPaths.grass_cube_2__png);
         var _reverse = Isometric.IsoTo2D(new FlxPoint(x, y), PointZ);
-        set_iso_coords(_reverse.x, _reverse.y, PointZ);    
+        set_iso_coords(newPoint.x, newPoint.y, PointZ);    
 
         color = FlxColor.BLACK;
         MinXRelative = -32;
@@ -75,10 +74,10 @@ class Player extends Basic {
 
         if (Movekey) {            
             var movePoint = Isometric.TwoDToIso(new FlxPoint(PointX, PointY), PointZ);
-            x = movePoint.x + (width / 2);
-            y = movePoint.y - (height / 4);
+            x = movePoint.x;
+            y = movePoint.y;
             Movekey = false;
-            set_iso_coords(PointX, PointY, PointZ);
+            set_iso_coords(movePoint.x, movePoint.y, PointZ);
         }
 
         
