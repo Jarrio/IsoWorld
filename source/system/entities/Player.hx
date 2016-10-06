@@ -17,9 +17,9 @@ class Player extends Basic {
     public var Speed:Int = 1;
     public var Movekey:Bool = false;
 
-    public var PointX:Int = 0;
-    public var PointY:Int = 0;
-    public var PointZ:Int = 0;
+    public var PointX:Int = 1;
+    public var PointY:Int = 1;
+    public var PointZ:Int = 1;
 
 
     

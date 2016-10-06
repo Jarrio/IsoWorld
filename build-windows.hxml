@@ -10,6 +10,12 @@
 -D hscript=2.0.7
 -cp P:/Development/HaxeToolkit/haxe/lib/flixel-addons/2,1,0
 -D flixel-addons=2.1.0
+-cp P:/Development/HaxeToolkit/haxe/lib/box2d/1,2,3
+-D box2d=1.2.3
+-cp P:/Development/HaxeToolkit/haxe/lib/polygonal-ds/2,0,0-beta/src
+-D polygonal-ds=2.0.0-beta
+-cp P:/Development/HaxeToolkit/haxe/lib/polygonal-printf/1,0,2-beta
+-D polygonal-printf=1.0.2-beta
 -cp source
 -cp P:\Development\HaxeToolkit\haxe\lib\openfl/3,6,1/extern
 -D HXCPP_QUIET

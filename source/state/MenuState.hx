@@ -15,7 +15,9 @@ class MenuState extends FlxState {
 		var switchToGridState = new FlxButton(20, 20, "Grid State", function() {FlxG.switchState(new GridState());});
 		add(switchToGridState);
 		
-		FlxG.switchState(new TestState());
+		FlxG.switchState(new GridState());
+		//FlxG.switchState(new LightState());
+		//FlxG.switchState(new TestState());
 	}
 
 	override public function update(elapsed:Float):Void

@@ -22,7 +22,9 @@ import system.entities.Basic;
 import system.helpers.Isometric;
 import flixel.system.FlxLinkedList;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
+import flixel.math.FlxRect;
 
+import Visibility; 
 import flixel.group.FlxGroup;
 
 class GridState extends FlxState {
@@ -34,6 +36,8 @@ class GridState extends FlxState {
 	public var ChunkRadius:FlxLinkedList;
 	public var game_camera:FlxCamera;
 	
+	public var lighting:Visibility; 
+
 	override public function create():Void { 
 		super.create();
 		grid = new Grid();
@@ -42,6 +46,10 @@ class GridState extends FlxState {
 		player.camera = grid.map_camera;
 		FlxG.debugger.visible = true;
 		
+		lighting = new Visibility();
+		var rect = new FlxRect(camera.x, camera.y, camera.width, camera.height);
+		
+
 
 		info = new FlxText(400, 20);
 		info.color = FlxColor.WHITE;		
@@ -158,9 +166,9 @@ class GridState extends FlxState {
 
 	private function SortBy3d(order:Int, a:Basic, b:Basic):Int {
 		if (a.IsoDepth > b.IsoDepth) {
-			return order;
+			return 1;
 		} else if (a.IsoDepth < b.IsoDepth) {
-			return -order;
+			return -1;
 		}
 
 		return 0;

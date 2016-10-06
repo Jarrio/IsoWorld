@@ -33,8 +33,8 @@ class GrassBlock implements BlockPattern extends Basic {
         MinXRelative = -32;
         MaxXRelative = 32;
          
-        MinYRelative = -16;
-        MaxYRelative = 16;
+        MinYRelative = -32;
+        MaxYRelative = 32;
 
         MinZRelative = -32;
         MaxZRelative = 32;             
