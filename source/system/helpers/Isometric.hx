@@ -5,19 +5,19 @@ import flixel.math.FlxPoint;
 import system.constants.Map;
 
 class Isometric {
-    static public function IsoTo2D(map:FlxPoint, z:Int):FlxPoint{
+    static public function IsoTo2D(map:FlxPoint, z:Float):FlxPoint{
         var screen:FlxPoint = new FlxPoint(0, 0);
         
         var newX = map.x / Map.BASE_TILE_HALF_WIDTH;
         var newY = map.y / Map.BASE_TILE_HALF_HEIGHT;
-        var newZ = z * Map.BASE_TILE_HALF_HEIGHT;
+        var newZ = (z * 2);
 
         screen.x = (newX + newY) / 2;                              
         screen.y = (newY - newX + newZ) / 2;                              
         return(screen);
     }
 
-    static public function TwoDToIso(map:FlxPoint, z:Int = 0):FlxPoint{
+    static public function TwoDToIso(map:FlxPoint, z:Float = 0):FlxPoint{
         //var StartX:Float = (FlxG.width / 2) - 32;
         //var StartY:Float = 100;
         var screen:FlxPoint = new FlxPoint(0, 0);
@@ -27,7 +27,7 @@ class Isometric {
 
         screen.x =  ((map.x - map.y) * Map.BASE_TILE_HALF_WIDTH);
         //FlxG.log.notice(z * Map.BASE_TILE_HALF_HEIGHT);
-        screen.y =  ((map.y + map.x - (z * Map.BASE_TILE_HALF_HEIGHT)) * Map.BASE_TILE_HALF_HEIGHT); 
+        screen.y =  ((map.y + map.x - (z * 2)) * Map.BASE_TILE_HALF_HEIGHT); 
         return screen;
     }
 

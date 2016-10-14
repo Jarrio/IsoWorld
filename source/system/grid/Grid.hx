@@ -1,29 +1,30 @@
 package system.grid;
 
-import flixel.FlxSprite;
-import system.grid.Tile;
-import flixel.FlxG;
-import flixel.math.FlxPoint;
-import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
-import flixel.util.FlxColor;
-import flixel.FlxCamera;
-import system.helpers.Isometric;
-import system.grid.Chunk;
-using flixel.util.FlxSpriteUtil;
 
-import system.constants.Map;
+
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.FlxCamera;
+import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
+import flixel.math.FlxRandom;
+
+import system.entities.Block;
+import system.entities.Basic;
+//import system.grid.Chunk;
+//import system.constants.Map;
 
 class Grid {
     public var chunk_render_distance:Int = 2;
     public var map_camera:FlxCamera;
-	public var chunks:Array<Chunk> = new Array<Chunk>();    
+	public var chunks:Array<Block> = new Array<Block>();    
     public var chunkx:Int = 200;
     public var chunky:Int = 100;
 
 
     public function new () {
         map_camera = new FlxCamera(100, 50, 400, 400);
-        map_camera.bgColor = FlxColor.BLUE;
+        map_camera.bgColor = FlxColor.BLACK;
         
     }
 
@@ -32,47 +33,21 @@ class Grid {
         var chunk_distance_y = Math.floor(map_camera.height / 64);
         FlxG.log.notice('x: ${chunk_distance_x} y: ${chunk_distance_y}');
 
-        for (y in 0...chunk_distance_y) {
-            for (x in 0...chunk_distance_x) {               
-                                
-                var new_chunk = new Chunk(x, y);
+        for (y in 2...7) {
+            for (x in 7...12) {
+                var random_height = new FlxRandom().int(1, 2);            
+                for (z in 0...random_height) {                                                      
+                    var new_chunk = new Block(x, y, z);
+                    chunks.push(new_chunk); 
+                      
 
-                chunks.push(new_chunk);
+
+                    
+                    
+                    
                 //chunks.add(chunk_outline);
+                }
             }
         }
-    }
-
-    public function GetChunkPoint(position:FlxPoint) {
-        var newX = position.x;
-        var newY = position.y;
-
-        var screen:FlxPoint = new FlxPoint(0, 0);
-
-        screen.x = Math.ceil((newX / Map.BASE_TILE_HALF_WIDTH + newY / Map.BASE_TILE_HALF_HEIGHT) / Map.CHUNK_SIZE);
-        screen.y = Math.ceil((newY / Map.BASE_TILE_HALF_HEIGHT - (newX / Map.BASE_TILE_HALF_WIDTH)) / Map.CHUNK_SIZE);
-                                        
-        return(screen);        
-    }
-
-    public function CalculateTiles() {/*
-        for (cellY in 0...10) {            
-            for (cellX in 0...10) {
-			    var oldPoint = new FlxPoint(cellX, cellY);
-			    var newPoint = Isometric.TwoDToIso(oldPoint);    
-                var reverse = Isometric.IsoTo2D(newPoint);
-
-                var newTile = new Tile(cellX, cellY, newPoint.x, newPoint.y);
-                newTile.x = newPoint.x;
-                newTile.y = newPoint.y;
-
-                
-                FlxG.log.notice('OldPointColumn: ${cellX} | OldPointRow: ${cellY}');
-                FlxG.log.notice('NewPointX: ${newPoint.x} | NewPointY: ${newPoint.y}');
-                FlxG.log.notice('ReversePointX: ${reverse.x} | ReversePointY: ${reverse.y}');
-                
-                StoredTiles[StoredTiles.length] = newTile;
-            }
-        }*/
-    }
+    }    
 }

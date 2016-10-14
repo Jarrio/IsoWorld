@@ -42,7 +42,7 @@
 	<!--<haxelib name="flixel-ui" />-->
 
 	<!--In case you want to use nape with flixel-->
-	<!--<haxelib name="nape" />-->
+	<haxelib name="nape" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
@@ -79,8 +79,12 @@
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)--> 
-	<haxelib name="hxcpp-debugger" if="debug" />
-	<haxedef name="HXCPP_DEBUGGER" if="debug" />
-	<haxelib name="box2d" />
-	<haxelib name="polygonal-ds" />
+	<haxelib name="hxcpp-debugger" if="HXCPP_DEBUGGER" />
+	<haxedef name="HXCPP_DEBUGGER" if="HXCPP_DEBUGGER" />
+
+	<haxelib name="hxtelemetry" if="telemetry"/>
+	<haxedef name="HXCPP_STACK_TRACE"  if="telemetry"/>
+	<haxedef name="HXCPP_TELEMETRY"  if="telemetry"/>
+
+
 </project>
