@@ -34,7 +34,7 @@ class Player extends Basic {
         //trace('ox: ${cellx} oy: ${celly} ± nx: ${oldpoint.x} ny: ${oldpoint.y} ± gx: ${this.x} gy: ${this.y}');
     }
 
-    public var Speed:Int = 1;
+    public var Speed:Float = 0.1;
     public var Jump:Bool = false;
     public var Movekey:Bool = false;
 
@@ -44,26 +44,26 @@ class Player extends Basic {
 
     override public function update(elapsed:Float) {
         super.update(elapsed);
-
-        if (FlxG.keys.anyJustPressed(['W', 'Up'])) {
-            IsoY -= 1;
+        if (FlxG.keys.anyPressed(['W', 'Up'])) {
+            IsoY -= Speed;
             Movekey = true;
-        } else if (FlxG.keys.anyJustPressed(['S', 'Down'])) {
-            IsoY += 1;
+        } else if (FlxG.keys.anyPressed(['S', 'Down'])) {
+            IsoY += Speed;
             Movekey = true;
-        } else if (FlxG.keys.anyJustPressed(['A', 'Left'])) {
-            IsoX -= 1;
+        } else if (FlxG.keys.anyPressed(['A', 'Left'])) {
+            IsoX -= Speed;
             Movekey = true;
-        } else if (FlxG.keys.anyJustPressed(['D', 'Right'])) {
-            IsoX += 1;
+        } else if (FlxG.keys.anyPressed(['D', 'Right'])) {
+            IsoX += Speed;
             Movekey = true;
-        } else if (FlxG.keys.justPressed.M) {
+        } else if (FlxG.keys.justPressed.X) {
             IsoZ += 1;
             Movekey = true;
-        } else if (FlxG.keys.justPressed.N) {
+        } else if (FlxG.keys.justPressed.Z) {
             IsoZ -= 1;
             Movekey = true;
         }
+        
 
         if (Movekey) {  
             Movekey = false;

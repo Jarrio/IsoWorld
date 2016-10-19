@@ -27,6 +27,7 @@ class Block extends Basic {
         MinZRelative = -32;
         MaxZRelative = 32;
         set_iso_coords(_x, _y, _z);
+        
         //trace('ox: ${cellx} oy: ${celly} ± nx: ${oldpoint.x} ny: ${oldpoint.y} ± gx: ${this.x} gy: ${this.y}');
         /*MinXRelative = -1;
         MaxXRelative = 1;

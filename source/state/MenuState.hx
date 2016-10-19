@@ -50,7 +50,7 @@ class MenuState extends FlxState {
 			var object = grid.chunks[i];
 			group.add(object);
 		}		
-		group.add(player);
+		group.add(player);		
 	}
 
 	override public function draw() {
@@ -76,42 +76,26 @@ class MenuState extends FlxState {
 	
 	public var _sortDepth = 0;
 	public var behind_index:Int = 0;
-	public var padding:Float = 0;
+	public var padding:Float = 0.1;
 
 	public function UpdateModels() {
 		var sprites_length = group.members.length;
 
 		group.forEach(function(sprite) {
-			sprite.MinX = sprite.x + sprite.MinXRelative;
-			sprite.MaxX = sprite.x + sprite.MaxXRelative;
-			sprite.MinY = sprite.y + sprite.MinYRelative;
-			sprite.MaxY = sprite.y + sprite.MaxYRelative;
-			sprite.MinZ = sprite.z + sprite.MinZRelative;
-			sprite.MaxZ = sprite.z + sprite.MaxZRelative;
-		});
-
-		group.forEach(function(sprite) {
-
+				
 				sprite.WidthX = Math.round(Math.abs(sprite.width) * 0.5) * Math.abs(sprite.scale.x);
 				sprite.WidthY = Math.round(Math.abs(sprite.width) * 0.5) * Math.abs(sprite.scale.x);
 				sprite.HalfWidthX = Math.round(sprite.WidthX * 0.5);
 				sprite.HalfWidthY = Math.round(sprite.WidthY * 0.5);
 
 				sprite.HeightZ = Math.round(Math.abs(sprite.height) - (Math.abs(sprite.width) * 0.5)) * Math.abs(sprite.scale.y);
-				
-				sprite.Top = 1 + sprite.IsoZ;
-		
+
 				sprite.FrontX = sprite.IsoX + 1;
 				sprite.FrontY = sprite.IsoY + 1;
-				
-				sprite.BackX = sprite.IsoX;
-				
-				sprite.BackY = sprite.IsoY;
-				
-				
-				
-			
+				sprite.Top = sprite.IsoZ + 1;
 
+				sprite.BackX = sprite.IsoX;				
+				sprite.BackY = sprite.IsoY;
 		});
 		
 		var a;
@@ -145,6 +129,9 @@ class MenuState extends FlxState {
 			visitNode(group.members[i]);	
 		}
 
+		group.forEach(function(basic) {
+			player.check_overlap_basic(basic);
+		});
 		group.sort(SortBy3d, FlxSort.ASCENDING);		
 	}
 
@@ -165,14 +152,18 @@ class MenuState extends FlxState {
 				}
 			}
 			//trace(sprite.return_debug_values(sprite.Entity));
-			_sortDepth++;
-			if (sprite.Entity == "Player") {
-				sprite.IsoDepth = _sortDepth;
-			} else {
-				sprite.IsoDepth = _sortDepth;
-			}
-				
-			}
+			_sortDepth+=2;
+			if (sprite.Moved) {
+				if (sprite.Entity == "Player") {
+					sprite.IsoDepth = _sortDepth - 1;
+				} else {
+					sprite.IsoDepth = _sortDepth;
+				}
+				sprite.Moved = true;				
+			}	
+
+		}
+			
 		
 	}	
 }

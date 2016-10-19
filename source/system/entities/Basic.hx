@@ -7,6 +7,7 @@ import flixel.math.FlxPoint;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import haxe.ds.Vector;
+import hxmath.math.Vector3;
 
 
 class Basic extends FlxSprite {
@@ -14,14 +15,14 @@ class Basic extends FlxSprite {
     public var id:Int;
     //public var type:BasicTypes;
 
-    public var WidthX:Float;
-    public var WidthY:Float;    
-    public var HeightZ:Float;    
+    public var WidthX:Float = 0;
+    public var WidthY:Float = 0;    
+    public var HeightZ:Float = 0;    
 
-    public var Top:Float;
-    public var Bottom:Float;
-    public var FrontX:Float;
-    public var FrontY:Float;
+    public var Top:Float = 0;
+    public var Bottom:Float = 0;
+    public var FrontX:Float = 0;
+    public var FrontY:Float = 0;
     
 //    @:isVar
     public var BackX(default, set):Float;
@@ -62,11 +63,11 @@ class Basic extends FlxSprite {
     public var Moved:Bool = true;
 
     //New Implementation
-    public var z:Float;
+    public var z:Float = 0;
 
-    public var IsoX:Int = 0;
-    public var IsoY:Int = 0;
-    public var IsoZ:Int = 0;
+    public var IsoX:Float;
+    public var IsoY:Float;
+    public var IsoZ:Float;
 
     public var Entity:String = null;
 
@@ -92,6 +93,9 @@ class Basic extends FlxSprite {
     public var IsoSpritesBehind:Array<Basic> = new Array<Basic>();
     public var IsoVisitedFlag:Bool;
 
+    public var ToggleCollision:Bool = false;
+    public var Colliding:Bool = false;
+
     public var PositionChanged:Bool = true;
     
     
@@ -100,7 +104,8 @@ class Basic extends FlxSprite {
 
     }
 
-    public function set_iso_coords(_x:Null<Int> = null, _y:Null<Int> = null, _z:Null<Int> = null):Void {
+    public var collide_int:Int = 0; 
+    public function set_iso_coords(_x:Null<Float> = null, _y:Null<Float> = null, _z:Null<Float> = null):Void {
         Moved = true;
         
         if ((_x != null) && (_y != null) && (_z != null)) {
@@ -109,22 +114,33 @@ class Basic extends FlxSprite {
             this.IsoZ = _z;            
         }
 
+        var point = Isometric.TwoDToIso(new FlxPoint(IsoX, IsoY), IsoZ);
         
-        var point = Isometric.TwoDToIso(new FlxPoint(IsoX, IsoY), IsoZ);        
+        
+
         this.z = (IsoZ * 2) * Map.BASE_TILE_HALF_HEIGHT;
         this.x = point.x;
         this.y = point.y;
+
         
     }
 
+    public function check_overlap_vector(object:Vector3):Bool {
+        if (object.x < this.FrontX && object.y < this.BackY && object.z < this.Top) {
+            return true;
+        }
 
-    public function set_z_coords() {
-        var point = this.y - (IsoZ * 2);
-        y = point;
+        return false;        
     }
 
+    public function check_overlap_basic(object:Basic):Bool {
+        if (object.BackX < this.FrontX && object.BackY < this.FrontY && object.IsoZ < this.Top) {
+            trace('Collided: ${Entity} - ${collide_int++}');
+            return true;
+        }
 
-
+        return false;
+    }
 
 
     public function return_debug_values(?_class:String):String {

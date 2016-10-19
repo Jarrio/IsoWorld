@@ -36,13 +36,13 @@
 	<haxelib name="flixel" />
 
 	<!--In case you want to use the addons package-->
-	<haxelib name="flixel-addons" />
+	<!--<haxelib name="flixel-addons" />-->
 
 	<!--In case you want to use the ui package-->
 	<!--<haxelib name="flixel-ui" />-->
 
 	<!--In case you want to use nape with flixel-->
-	<haxelib name="nape" />
+	<!--<haxelib name="nape" />-->
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
@@ -79,12 +79,12 @@
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)--> 
-	<haxelib name="hxcpp-debugger" if="HXCPP_DEBUGGER" />
-	<haxedef name="HXCPP_DEBUGGER" if="HXCPP_DEBUGGER" />
-
+	<haxelib name="hxcpp-debugger" if="debug" />
+	<haxedef name="HXCPP_DEBUGGER" if="debug" />	
+	
 	<haxelib name="hxtelemetry" if="telemetry"/>
 	<haxedef name="HXCPP_STACK_TRACE"  if="telemetry"/>
 	<haxedef name="HXCPP_TELEMETRY"  if="telemetry"/>
 
-
+	<haxelib name="hxmath"/>	
 </project>
