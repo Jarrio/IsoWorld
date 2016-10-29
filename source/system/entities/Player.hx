@@ -1,93 +1,50 @@
 package system.entities;
 
-import flixel.FlxG;
-import flixel.math.FlxPoint;
+import flixel.graphics.FlxGraphic;
+import system.entities.IsoSprite;
 import flixel.util.FlxColor;
-import system.helpers.Isometric;
+import flixel.FlxG;
 
-class Player extends Basic {
-
-    public function new(_x:Int, _y:Int, _z:Int) {
-        super();
-
-        Entity = "Player";    
+class Player extends IsoSprite {
+    public function new(x:Float, y:Float, z:Float, ?graphic:String) {
+        if (graphic == null) {
+            graphic = AssetPaths.green_cube_v2__png;            
+        }        
+        super(x, y, z, graphic);
+        color = FlxColor.RED;
         
-        loadGraphic(AssetPaths.green_cube__png);
-        this.centerOffsets(true);
-        this.centerOrigin();
-        MinXRelative = -32;
-        MaxXRelative = 32;
-         
-        MinYRelative = -32;
-        MaxYRelative = 32;
-
-        MinZRelative = -32;
-        MaxZRelative = 32;
-        set_iso_coords(_x, _y, _z);
-        
-        color = FlxColor.RED; 
-
-
-
-     
-        
-        //trace('ox: ${cellx} oy: ${celly} ± nx: ${oldpoint.x} ny: ${oldpoint.y} ± gx: ${this.x} gy: ${this.y}');
+        this.entity = "Player";
     }
-
-    public var Speed:Float = 0.1;
-    public var Jump:Bool = false;
-    public var Movekey:Bool = false;
-
     
-
-    public var UpdateSort:Bool = false;
-
+    public var Speed:Float = 0.5;
+    public var Movekey:Bool = false;
     override public function update(elapsed:Float) {
-        super.update(elapsed);
-        if (FlxG.keys.anyPressed(['W', 'Up'])) {
-            IsoY -= Speed;
+        #if windows
+      if (FlxG.keys.anyPressed(['W', 'Up'])) {
+            this.iso_y = -Speed;
             Movekey = true;
         } else if (FlxG.keys.anyPressed(['S', 'Down'])) {
-            IsoY += Speed;
+            this.iso_y = Speed;
             Movekey = true;
         } else if (FlxG.keys.anyPressed(['A', 'Left'])) {
-            IsoX -= Speed;
+            this.iso_x = -Speed;
             Movekey = true;
         } else if (FlxG.keys.anyPressed(['D', 'Right'])) {
-            IsoX += Speed;
+            this.iso_x = Speed;
             Movekey = true;
         } else if (FlxG.keys.justPressed.X) {
-            IsoZ += 1;
+            this.iso_z = -1;
             Movekey = true;
         } else if (FlxG.keys.justPressed.Z) {
-            IsoZ -= 1;
+            this.iso_z = 1;
             Movekey = true;
         }
+        #end
         
 
         if (Movekey) {  
             Movekey = false;
-            UpdateSort = true;
-            set_iso_coords(null, null, null);
-        }      
-        
-
-        if (FlxG.mouse.overlaps(this)) {
-            if (FlxG.mouse.justPressed) {
-                //FlxG.log.notice(return_debug_values('Player ${IsoDepth}'));
-                FlxG.log.notice('Type: {${this.Entity}} | FrontX: ${this.FrontX} | FrontY: ${this.FrontY} | Top: ${this.Top}');
-            }
-        }
-
-        FlxG.watch.addQuick("Player Depth", '${this.IsoDepth}');
-        FlxG.watch.addQuick("Player Axis", 'x: ${x} | y: ${y} |  z: ${z}');
-        FlxG.watch.addQuick("Player Coords", 'x: ${IsoX} | y: ${IsoY} | z:${IsoZ}');
-        
-        // FlxG.watch.addQuick("Player Min", 'x: ${MinX} | y: ${MinY} | z:${MinZ}'); 
-        // FlxG.watch.addQuick("Player Max", 'x: ${MaxX} | y: ${MaxY} | z:${MaxZ}'); 
-         
-        
+            this.ResetBounds();         
+        }          
     }
-
-
 }

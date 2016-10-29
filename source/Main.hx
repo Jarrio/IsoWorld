@@ -4,7 +4,7 @@ import flixel.FlxGame;
 import openfl.Lib;
 import openfl.display.Sprite;
 import state.MenuState;
-import state.GridState;
+import state.TestState;
 #if (debug && cpp)
 import debugger.HaxeRemote;
 #end
@@ -16,7 +16,7 @@ class Main extends Sprite {
 		#if (debug && cpp)
 			new debugger.HaxeRemote(false, "localhost");
 		#end
-		var game = new FlxGame(640, 480, MenuState);
-		addChild(game);
+		
+		addChild(new FlxGame(1280, 720, MenuState));
 	}
 }
