@@ -37,15 +37,9 @@ class Depth {
         return false;
     }
 
-    public function sort_loop(objects:Array<IsoSprite>):Void {
-        for (i in 0...objects.length) {
-            visit_node(objects[i]);
-        }
-    }
-
     public function visit_node(node:IsoSprite) {
-        if (node.iso_visited == false) {
-            node.iso_visited = true;
+        if (node.iso_visited == 0) {
+            node.iso_visited = 1;
 
             var sprites_behind_length = node.iso_sprites_behind.length;
             for (i in 0...sprites_behind_length) {

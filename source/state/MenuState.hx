@@ -58,13 +58,10 @@ class MenuState extends FlxState {
 			group.add(member);
 		}
 		player = new Player(0, 0, 1);
-		//group.add(player);
+		group.add(player);
+		group.dirty = true;
 		add(group);
 		
-		text = new FlxText(400, 100, 150);
-		text.color = FlxColor.WHITE;
-		add(text);
-
 		this.init();
 //		FlxG.cameras.add()
 	}
@@ -98,38 +95,30 @@ class MenuState extends FlxState {
 		for (i in 0...group.length) {
 			var a = group.members[i];
 			index_behind = 0;
-
-			var a_vector = new Vector<Float>(3);
-			a_vector[0] = a.iso_bounds.front_x;
-			a_vector[1] = a.iso_bounds.front_y;
-			a_vector[2] = a.iso_bounds.top;
 			
 			for (j in 0...group.length) {
 				if (i != j) {
 					var b = group.members[j];
-					var b_vector = new Vector<Float>(3);
-					b_vector[0] = b.iso_bounds._x;
-					b_vector[1] = b.iso_bounds._y;
-					b_vector[2] = b.iso_bounds._z;			
 
-					if(depth.find_overlaps(a_vector, b_vector)) {
-						//a.iso_sprites_behind[index_behind++] = b;
+					if(depth.find_overlaps(a.iso_bounds.a_comparison, b.iso_bounds.b_comparison)) {
+						a.iso_sprites_behind[index_behind++] = b;						
 					}
 				}
 			}
-			a.iso_visited = false;
+			a.iso_visited = 0;
 		}
 
 		depth.sort_depth = 0;
 		for (i in 0...group.length) {
-			//depth.visit_node(group.members[i]);
+			depth.visit_node(group.members[i]);
 		}
 		
-		//group.sort(SortBy3d, FlxSort.DESCENDING);
+		group.sort(SortBy3d, FlxSort.DESCENDING);
 	}
 
+
 	private function SortBy3d(order:Int, a:IsoSprite, b:IsoSprite):Int {
-		//return FlxSort.byValues(order, a.IsoDepth, b.IsoDepth);
+		//return FlxSort.byValues(order, b.iso_depth, a.iso_depth);
 		if (a.iso_depth > b.iso_depth) {
 			return 1;
 		} else if (a.iso_depth < b.iso_depth) {

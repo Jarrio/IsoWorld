@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.system.debug.watch.Tracker.TrackerProfile;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
+import haxe.ds.Vector;
 import hxmath.math.Vector2;
 import hxmath.math.Vector3;
 
@@ -17,7 +18,7 @@ class IsoSprite extends FlxSprite {
     public var iso_bounds:Cube;
     public var z:Float = 0;
     
-    public var iso_visited:Bool = false;
+    public var iso_visited:Int = 0;
     public var iso_depth:Int = 0;
 
     //@optimise iso_sprites_behind no reason to store more sprites

@@ -32,10 +32,17 @@ class Generate {
         water.octaves = 3;
         water.persistance = 0.2;
         water.quality = QualityMode.HIGH;
-        
-
     }
 
+    /*****
+     * Draw Loop: 4.7ms
+     * Update Loop: 120ms 
+     * FPS: 7.3
+     * Draw: 1.6k
+     * Draw tiles: 1107
+     *
+     * 12 x 12 x 4
+     ******/
     public function Terrain() {
         var max_x = 12;
         var max_y = 12;
@@ -101,7 +108,7 @@ class Generate {
         return Blocks.Air;
     }
 
-    public function block(x:Float, y:Float, z:Float, graphic) {
+    public function block(x:Int, y:Int, z:Int, graphic) {
         var block = new Block(x, y, z, graphic);
         members.push(block);
     }

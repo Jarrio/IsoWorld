@@ -89,5 +89,33 @@ class Cube extends Body {
         return this.y + this.width_y;
     }
 
+    public var volume(get, null):Float;
+
+    public function get_volume():Float {
+        return this.width_x * this.width_y * this.height;
+    }
+
+    public function contains(cube:Cube, x:Float, y:Float, z:Float):Bool {
+        if (cube.width_x <= 0 || cube.width_y <= 0 || cube.height <= 0) {
+            return false;
+        }
+
+        return (x >= cube._x && x <= cube.front_x && y >= cube._y && y <= cube.front_y && z >= cube._z && z <= cube.top);
+    }
     
+    public function containsCube(a:Cube, b:Cube):Bool {
+        if (a.volume > b.volume) {
+            return false;
+        }
+
+        return (a._x >= b._x && a._y >= b._y && a._z >= b._z && a.front_x <= b.front_y && a.front_y <= b.front_y && a.top <= b.top);
+    }
+    
+    public function intersects(a:Cube, b:Cube):Bool {
+        if (a.width_x <= 0 || a.width_y <= 0 || a.height <= 0 || b.width_x <= 0 || b.width_y <= 0 || b.height <= 0) {
+            return false;
+        }
+
+        return !(a.front_x < b._x || a.front_y < b._y || a._x > b.front_x || a._y > b.front_y || a._z > b.top || a.top < b._z);
+    }
 }

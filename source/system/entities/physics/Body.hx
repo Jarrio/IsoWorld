@@ -116,19 +116,25 @@ class Body {
 
     public var moved:Bool = true;
 
+    public var a_comparison:Vector<Float> = new Vector<Float>(3);
+    public var b_comparison:Vector<Float> = new Vector<Float>(3);
+
+
     public function new(sprite:IsoSprite) {
         this.sprite = sprite;
     }
 
     public function init() {
-        this.width_x = Math.ceil(this.sprite.width * 0.5);
-        this.width_y = Math.ceil(this.sprite.width * 0.5);
-        this.height  = Math.ceil(this.sprite.height) - Math.ceil(this.sprite.width * 0.5);
+        this.width_x = (this.sprite.width * 0.5);
+        this.width_y = (this.sprite.width * 0.5);
+        this.height  = (this.sprite.height) - (this.sprite.width * 0.5);
 
-        this.half_width_x = Math.abs(this.width_x * 0.5);
-        this.half_width_y = Math.abs(this.width_y * 0.5);
-        this.half_height = Math.abs(this.height * 0.5);
+        this.half_width_x = (this.width_x * 0.5);
+        this.half_width_y = (this.width_y * 0.5);
+        this.half_height = (this.height * 0.5);
 
+
+        
 
         //this.position.set(sprite.IsoX(), sprite.IsoY(), sprite.IsoZ());
         //this.previous_position.set(this.position.x, this.position.y, this.position.z);
@@ -170,6 +176,14 @@ class Body {
         this.sprite.y = (FlxG.height / 2) + (this.sprite.iso_x + this.sprite.iso_y - (this.sprite.iso_z * 2)) * (this.half_width_y);
         this.sprite.z = (this.sprite.iso_z * 2) * (this.half_height);
         
+        this.a_comparison[0] = this.front_x;
+        this.a_comparison[1] = this.front_y;
+        this.a_comparison[2] = this.top;
+
+        this.b_comparison[0] = this._x;
+        this.b_comparison[1] = this._y;
+        this.b_comparison[2] = this._z;
+
         //this.moved = false;
         //------------------------------------------------
         // this.x = (this.IsoX() - this.IsoY()) * this.iso_bounds.width_x;
