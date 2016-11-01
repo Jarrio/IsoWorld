@@ -44,9 +44,9 @@ class Generate {
      * 12 x 12 x 4
      ******/
     public function Terrain() {
-        var max_x = 12;
-        var max_y = 12;
-        var max_z = 4;
+        var max_x = 1;
+        var max_y = 1;
+        var max_z = 1;
         for (x in 0...max_x) {
             for (y in 0...max_y) {
                 for (z in 0...max_z) {

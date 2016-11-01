@@ -11,6 +11,7 @@ import hxmath.math.Vector3;
 
 import system.entities.physics.Cube;
 import system.entities.physics.Body;
+import system.world.World;
 
 class IsoSprite extends FlxSprite {
     
@@ -21,20 +22,26 @@ class IsoSprite extends FlxSprite {
     public var iso_visited:Int = 0;
     public var iso_depth:Int = 0;
 
+    public var world:World;
+
     //@optimise iso_sprites_behind no reason to store more sprites
     public var iso_sprites_behind:Array<IsoSprite> = new Array<IsoSprite>();
 
-    public var anchor = new Vector2(0.5, 0.5);
+    public var anchor = new Vector2(0, 0);
     
     public var entity:String;
     
-    public function new(?x:Float, ?y:Float, ?z:Float, ?graphic:String) {
+    public function new(?x:Float, ?y:Float, ?z:Float, ?graphic:String, ?world) {
         super();  
 
         if (graphic != null) {
             this.loadGraphic(graphic);
         }
 
+        if (world != null) {
+            this.world = world;
+        }
+        
         if (this.iso_bounds == null) {
             iso_bounds = new Cube(this);
         }
@@ -45,7 +52,9 @@ class IsoSprite extends FlxSprite {
             iso_z = z;
         }
 
-        ResetBounds();          
+
+
+        ResetIsoBounds();          
 
     }
 
@@ -59,7 +68,9 @@ class IsoSprite extends FlxSprite {
     @:noCompletion
     public function set_iso_x(value:Float):Float {
         this.iso_position.x = FlxMath.roundDecimal(this.iso_position.x + value, 3);
-        this.iso_bounds.moved = true;
+        if (this.iso_bounds != null) {
+            this.iso_bounds.reset = true;
+        }
         return this.iso_position.x;
     }
 
@@ -73,7 +84,9 @@ class IsoSprite extends FlxSprite {
     @:noCompletion
     public function set_iso_y(value:Float):Float {
         this.iso_position.y = FlxMath.roundDecimal(this.iso_position.y + value, 3);
-        this.iso_bounds.moved = true;
+        if (this.iso_bounds != null) {
+            this.iso_bounds.reset = true;
+        }
         return this.iso_position.y;
     }
     
@@ -87,11 +100,13 @@ class IsoSprite extends FlxSprite {
     @:noCompletion
     public function set_iso_z(value:Float):Float {
         this.iso_position.z = FlxMath.roundDecimal(this.iso_position.z + value, 3);
-        this.iso_bounds.moved = true;
+        if (this.iso_bounds != null) {
+            this.iso_bounds.reset = true;
+        }        
         return this.iso_position.z;
     }    
 
-    public function ResetBounds() {
+    public function ResetIsoBounds() {
 
 
         this.iso_bounds.width_x = Math.round(Math.abs(this.width) * 0.5);

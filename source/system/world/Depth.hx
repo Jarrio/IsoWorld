@@ -2,6 +2,7 @@ package system.world;
 
 import haxe.ds.Vector;
 import system.entities.IsoSprite; 
+import flixel.FlxG;
 
 class Depth {
     public var sort_depth:Int = 0;    
@@ -15,6 +16,12 @@ class Depth {
 
     public function update_bounding_cube(sprite:IsoSprite) {
         sprite.iso_bounds.PreUpdate();
+        sprite.x = (FlxG.width / 2) + (sprite.iso_x - sprite.iso_y) * sprite.iso_bounds.width_x;
+        sprite.y = (FlxG.height / 2) + (sprite.iso_x + sprite.iso_y - (sprite.iso_z * 2)) * (sprite.iso_bounds.half_width_y);
+        sprite.z = (sprite.iso_z * 2) * (sprite.iso_bounds.half_height);     
+        sprite.iso_bounds.PostUpdate();
+        
+   
     }
 
     public function find_overlaps(a_object:Vector<Float>, b_object:Vector<Float>):Bool {

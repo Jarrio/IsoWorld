@@ -26,7 +26,7 @@ import system.debug.TrackerProfiles;
 import system.debug.CustomCommands;
 import state.Test;
 
-
+import system.world.World;
 
 class MenuState extends FlxState {
 	public var depth:Depth;
@@ -35,7 +35,11 @@ class MenuState extends FlxState {
 	public var group:FlxTypedSpriteGroup<IsoSprite> = new FlxTypedSpriteGroup<IsoSprite>();
 	public var text:FlxText;
 	
+	public var world:World = new World();
+
 	public var player:Player;
+
+	
 	override public function create():Void {		
 		super.create();		
 		#if next
@@ -46,7 +50,7 @@ class MenuState extends FlxState {
 		FlxG.sound.soundTrayEnabled = false;
 		//FlxG.sound.play("Test");
 		#end
-		
+
 		depth = new Depth();
 		generate = new Generate();
 		generate.Terrain();
@@ -55,11 +59,13 @@ class MenuState extends FlxState {
 		for (i in 0...generate.members.length) {
 			var member = generate.members[i];
 			member.ID = i;
+			member.world = this.world;
 			group.add(member);
 		}
-		player = new Player(0, 0, 1);
+
+		player = new Player(0, 0, 0, null, this.world);
 		group.add(player);
-		group.dirty = true;
+		this.camera.follow(player);
 		add(group);
 		
 		this.init();
@@ -75,21 +81,26 @@ class MenuState extends FlxState {
 			depth.update_bounding_cube(sprite);
 		});
 
-		var camera_speed = 20;
-		if(FlxG.keys.pressed.I) {
-			FlxG.camera.scroll.y -= camera_speed;
-		} else if(FlxG.keys.pressed.K) {
-			FlxG.camera.scroll.y += camera_speed;
-		} else if(FlxG.keys.pressed.J) {
-			FlxG.camera.scroll.x -= camera_speed;
-		} else if(FlxG.keys.pressed.L) {
-			FlxG.camera.scroll.x += camera_speed;
-		}
 
 		if(FlxG.keys.pressed.U) {
 			FlxG.camera.zoom -= 0.1;
 		} else if(FlxG.keys.pressed.O) {
 			FlxG.camera.zoom += 0.1;
+		}
+
+		if (FlxG.keys.pressed.ZERO) {
+			this.player.iso_x = -10;
+			this.player.iso_y = 0;
+			this.player.iso_z = 0;
+
+			this.player.iso_bounds.position.x = 0;
+			this.player.iso_bounds.position.y = 0;
+			this.player.iso_bounds.position.z = 0;
+			
+			this.player.x = 0;
+			this.player.y = 0;
+			this.player.z = 0;
+
 		}
 
 		for (i in 0...group.length) {
@@ -99,7 +110,6 @@ class MenuState extends FlxState {
 			for (j in 0...group.length) {
 				if (i != j) {
 					var b = group.members[j];
-
 					if(depth.find_overlaps(a.iso_bounds.a_comparison, b.iso_bounds.b_comparison)) {
 						a.iso_sprites_behind[index_behind++] = b;						
 					}
@@ -112,8 +122,17 @@ class MenuState extends FlxState {
 		for (i in 0...group.length) {
 			depth.visit_node(group.members[i]);
 		}
-		
+
 		group.sort(SortBy3d, FlxSort.DESCENDING);
+		
+		var intersects = this.world.intersects(player.iso_bounds, group.members[0].iso_bounds);
+		var collide = this.world.SeperateX(player.iso_bounds, group.members[0].iso_bounds, false);
+		
+		FlxG.watch.addQuick("Intersects", intersects);		
+		FlxG.watch.addQuick("CollisionX", collide);
+		FlxG.watch.addQuick("Played DeltaX", player.iso_bounds.delta_x);
+		FlxG.watch.addQuick("World Overlap", world.overlap);
+
 	}
 
 
@@ -134,8 +153,6 @@ class MenuState extends FlxState {
 		var trackers = new TrackerProfiles();
 		FlxG.debugger.addTrackerProfile(new TrackerProfile(FlxSprite, [""]));
 		for (i in 0...trackers.profiles.length) {
-			var clname = Type.getClassName(trackers.profiles[i].objectClass);
-			trace('${i} - ${clname}');
 			FlxG.debugger.addTrackerProfile(trackers.profiles[i]);
 		}
 
@@ -148,6 +165,8 @@ class MenuState extends FlxState {
 		window.reposition(0, 0);
 		var player_height = window.height; 
 		FlxG.debugger.track(player.iso_bounds, "Player body").reposition(0, player_height);
+
+		commands.sprite(commands.group(0));
 		#end		
 	}
 }
