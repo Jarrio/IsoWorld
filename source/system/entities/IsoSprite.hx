@@ -16,7 +16,8 @@ import system.world.World;
 class IsoSprite extends FlxSprite {
     
     public var iso_position:Vector3 = new Vector3(0, 0, 0);
-    public var iso_bounds:Cube;
+    public var iso_bounds:Body;
+    public var cube:Cube;
     public var z:Float = 0;
     
     public var iso_visited:Int = 0;
@@ -43,7 +44,7 @@ class IsoSprite extends FlxSprite {
         }
         
         if (this.iso_bounds == null) {
-            iso_bounds = new Cube(this);
+            iso_bounds = new Body(this);
         }
 
         if (x != null && y != null && z != null) {
@@ -113,9 +114,9 @@ class IsoSprite extends FlxSprite {
         this.iso_bounds.width_y = Math.round(Math.abs(this.width) * 0.5);
         this.iso_bounds.height  = Math.round(Math.abs(this.height) - (Math.abs(this.width) * 0.5));
 
-        this.iso_bounds._x = this.iso_x + (this.iso_bounds.width_x * this.anchor.x) + (this.iso_bounds.width_x);
-        this.iso_bounds._y = this.iso_y + (this.iso_bounds.half_width_y * this.anchor.x) - (this.iso_bounds.half_width_y);
-        this.iso_bounds._z = this.iso_z - (Math.abs(this.height) * (1 - this.anchor.y)) + (Math.abs(this.width * 0.5));
+        this.iso_bounds.x = this.iso_x + (this.iso_bounds.width_x * this.anchor.x) + (this.iso_bounds.width_x);
+        this.iso_bounds.y = this.iso_y + (this.iso_bounds.half_width_y * this.anchor.x) - (this.iso_bounds.half_width_y);
+        this.iso_bounds.z = this.iso_z - (Math.abs(this.height) * (1 - this.anchor.y)) + (Math.abs(this.width * 0.5));
  
     }
 

@@ -2,23 +2,23 @@ package system.entities.physics;
 
 import flixel.math.FlxMath;
 
-class Cube extends Body {
+class Cube {
 
+    public var body:Body;
     public var x:Float = 0;
     public var y:Float = 0;
     public var z:Float = 0;
 
-    public function new(sprite:IsoSprite) {
-        super(sprite);
-        this.init();
+    public function new(_body:Body) {
+        this.body = _body;
     }
 
     public function BackX(?value:Float):Float {
         if (value != null) {
-            if (value >= this.front_x) {
-                this.width_x = 0;
+            if (value >= this.body.front_x) {
+                this.body.width_x = 0;
             } else {
-                this.width_x = (this.front_x - value);
+                this.body.width_x = (this.body.front_x - value);
             }
             
             this.x = value;
@@ -29,10 +29,10 @@ class Cube extends Body {
 
     public function BackY(?value:Float):Float {
         if (value != null) {
-            if (value >= this.front_y) {
-                this.width_y = 0;
+            if (value >= this.body.front_y) {
+                this.body.width_y = 0;
             } else {
-                this.width_y = (this.front_y - value);
+                this.body.width_y = (this.body.front_y - value);
             }
             this.y = value;
         }
@@ -42,10 +42,10 @@ class Cube extends Body {
 
     public function CubeBottom(?value:Float):Float {
         if (value != null) {
-            if (value >= this.top) {
-                this.height = 0;
+            if (value >= this.body.top) {
+                this.body.height = 0;
             } else {
-                this.height = this.top - value;
+                this.body.height = this.body.top - value;
             }
             this.z = value;
         }
@@ -56,51 +56,51 @@ class Cube extends Body {
     public function CubeTop(?value:Float):Float {
         if (value != null) {
             if (value >= this.z) {
-                this.height = 0;
+                this.body.height = 0;
             } else {
-                this.height = value - this.z;
+                this.body.height = value - this.z;
             }
         }
         
-        return this.z + this.height;
+        return this.z + this.body.height;
     }
 
     public function CubeFrontX(?value:Float):Float {
         if (value != null) {
             if (value <= this.x) {
-                this.width_x = 0;
+                this.body.width_x = 0;
             } else {
-                this.width_x = (value - this.x);
+                this.body.width_x = (value - this.x);
             }
         }
         
-        return this.x + this.width_x;
+        return this.x + this.body.width_x;
     }            
 
     public function CubeFrontY(?value:Float):Float {
         if (value != null) {
             if (value <= this.y) {
-                this.width_y = 0;
+                this.body.width_y = 0;
             } else {
-                this.width_y = (value - this.y);
+                this.body.width_y = (value - this.y);
             }
         }
         
-        return this.y + this.width_y;
+        return this.y + this.body.width_y;
     }
 
     public var volume(get, null):Float;
 
     public function get_volume():Float {
-        return this.width_x * this.width_y * this.height;
+        return this.body.width_x * this.body.width_y * this.body.height;
     }
 
     public function contains(cube:Cube, x:Float, y:Float, z:Float):Bool {
-        if (cube.width_x <= 0 || cube.width_y <= 0 || cube.height <= 0) {
+        if (cube.body.width_x <= 0 || cube.body.width_y <= 0 || cube.body.height <= 0) {
             return false;
         }
 
-        return (x >= cube._x && x <= cube.front_x && y >= cube._y && y <= cube.front_y && z >= cube._z && z <= cube.top);
+        return (x >= cube.body.x && x <= cube.body.front_x && y >= cube.body.y && y <= cube.body.front_y && z >= cube.body.z && z <= cube.body.top);
     }
     
     public function containsCube(a:Cube, b:Cube):Bool {
@@ -108,14 +108,14 @@ class Cube extends Body {
             return false;
         }
 
-        return (a._x >= b._x && a._y >= b._y && a._z >= b._z && a.front_x <= b.front_y && a.front_y <= b.front_y && a.top <= b.top);
+        return (a.body.x >= b.body.x && a.body.y >= b.body.y && a.body.z >= b.body.z && a.body.front_x <= b.body.front_y && a.body.front_y <= b.body.front_y && a.body.top <= b.body.top);
     }
     
     public function intersects(a:Cube, b:Cube):Bool {
-        if (a.width_x <= 0 || a.width_y <= 0 || a.height <= 0 || b.width_x <= 0 || b.width_y <= 0 || b.height <= 0) {
+        if (a.body.width_x <= 0 || a.body.width_y <= 0 || a.body.height <= 0 || b.body.width_x <= 0 || b.body.width_y <= 0 || b.body.height <= 0) {
             return false;
         }
 
-        return !(a.front_x < b._x || a.front_y < b._y || a._x > b.front_x || a._y > b.front_y || a._z > b.top || a.top < b._z);
+        return !(a.body.front_x < b.body.x || a.body.front_y < b.body.y || a.body.x > b.body.front_x || a.body.y > b.body.front_y || a.body.z > b.body.top || a.body.top < b.body.z);
     }
 }

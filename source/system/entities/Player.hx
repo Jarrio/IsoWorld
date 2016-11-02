@@ -15,7 +15,8 @@ class Player extends IsoSprite {
         color = FlxColor.RED;
         
         this.entity = "Player";
-        this.iso_bounds.moves = true;
+        this.iso_bounds.weight = 0.1;
+        this.iso_bounds.moves = true; 
         this.iso_bounds.post_update = true;
     }
     
@@ -36,23 +37,23 @@ class Player extends IsoSprite {
 
         }
         
-        if (FlxG.keys.anyPressed(['A', 'Left'])) {
+        if (FlxG.keys.anyPressed(['A', 'Left']) && (!this.iso_bounds.touching.back_x)) {
             // this.iso_x = -Speed;
             this.iso_bounds.velocity.x = -speed;
             Movekey = true;
-        } else if (FlxG.keys.anyPressed(['D', 'Right'])) {
+        } else if (FlxG.keys.anyPressed(['D', 'Right']) && (!this.iso_bounds.touching.front_x)) {
             // this.iso_x = Speed;
             this.iso_bounds.velocity.x = speed;
             Movekey = true;
-        } else if (FlxG.keys.anyJustReleased(['A', 'D', 'Left', 'Right'])) {
+        } else {
             this.iso_bounds.velocity.x = 0;
         }
         
-        if (FlxG.keys.justPressed.X) {
+        if (FlxG.keys.pressed.X) {
             // this.iso_z = -1;
             this.iso_bounds.velocity.z = -speed;
             Movekey = true;
-        } else if (FlxG.keys.justPressed.Z) {
+        } else if (FlxG.keys.pressed.Z) {
             // this.iso_z = 1;
             this.iso_bounds.velocity.z = speed;
             Movekey = true;

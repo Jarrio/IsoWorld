@@ -10,6 +10,7 @@ import system.constants.Physics.Blocked;
 import haxe.ds.Vector;
 
 import system.entities.IsoSprite;
+import system.constants.Physics;
 
 
 class Body {
@@ -38,7 +39,7 @@ class Body {
     
     public var max_velocity:Vector3 = new Vector3(1000, 1000, 1000);
 
-    public var bounce:Vector3 = new Vector3(0, 0, 0);
+    public var bounce:Vector3 = new Vector3(10, 10, 10);
 
     public var max_delta:Vector3 = new Vector3(0, 0, 0);
 
@@ -76,7 +77,7 @@ class Body {
 
     public var immovable:Bool = false;
 
-    public var weight:Int = 1;
+    public var weight:Float = 1;
 
     /**
     * @property {wasTouching} - Previous touching values
@@ -98,6 +99,12 @@ class Body {
     public var moves:Bool = false;
     public var just_started:Bool = true;
     public var reset:Bool = true;
+
+    public var delta_x:Float = 0;
+    public var delta_y:Float = 0;
+    public var delta_z:Float = 0;
+
+    public var current_overlap:CollideSide = CollideSide.none;
 
     public function new(sprite:IsoSprite) {
         this.sprite = sprite;
@@ -127,45 +134,50 @@ class Body {
 
         //Store and reset collision flags
         this.wasTouching.none = this.touching.none;
-        this.wasTouching.up = this.touching.up;
-        this.wasTouching.down = this.touching.down;
+        this.wasTouching.top = this.touching.top;
+        this.wasTouching.bottom = this.touching.bottom;
         this.wasTouching.back_x = this.touching.back_x;
         this.wasTouching.back_y = this.touching.back_y;
         this.wasTouching.front_x = this.touching.front_x;
         this.wasTouching.front_y = this.touching.front_y;
 
         this.touching.none = true;
-        this.touching.up = false;
-        this.touching.down = false;
+        this.touching.top = false;
+        this.touching.bottom = false;
         this.touching.back_x = false;
         this.touching.back_y = false;
         this.touching.front_x = false;
         this.touching.front_y = false;
 
-        this.blocked.up = false;
-        this.blocked.down = false;
+        this.blocked.top = false;
+        this.blocked.bottom = false;
         this.blocked.front_y = false;
         this.blocked.front_x = false;
         this.blocked.back_y = false;
         this.blocked.back_x = false;
 
         this.implanted = false;
-        
-        this.position.x = this.sprite.iso_x + ((this.width_x * -this.sprite.anchor.x) + this.width_x * 0.5) + this.offset.x;
-        this.position.y = this.sprite.iso_y + ((this.width_y * this.sprite.anchor.x) - this.width_y * 0.5) + this.offset.y;
-        this.position.z = this.sprite.iso_z - (Math.abs(this.sprite.height) * (1 - this.sprite.anchor.y)) + (Math.abs(this.sprite.width * 0.5)) + this.offset.z;        
-        
-        if (this.reset || this.just_started) {
-            this.previous.x = this._x;
-            this.previous.y = this._y;
-            this.previous.z = this._z;
 
+        this.current_overlap = CollideSide.none;
+        
+        this.x = this.sprite.iso_x + ((this.width_x * -this.sprite.anchor.x) + this.width_x * 0.5) + this.offset.x;
+        this.y = this.sprite.iso_y + ((this.width_y * this.sprite.anchor.x) - this.width_y * 0.5) + this.offset.y;
+        this.z = this.sprite.iso_z - (Math.abs(this.sprite.height) * (1 - this.sprite.anchor.y)) + (Math.abs(this.sprite.width * 0.5)) + this.offset.z;        
+                
+        if (this.reset || this.just_started) {
+            this.previous.x = this.x;
+            this.previous.y = this.y;
+            this.previous.z = this.z;
+
+            // this.x = (FlxG.width / 2) + (this.sprite.iso_x - this.sprite.iso_y) * this.width_x;
+            // this.y = (FlxG.height / 2) + (this.sprite.iso_x + this.sprite.iso_y - (this.sprite.iso_z * 2)) * (this.half_width_y);
+            // this.z = (this.sprite.iso_z * 2) * (this.half_height);     
             if (this.just_started) this.just_started = false;
         }
         //------------------------------------------------
-        // this.sprite.x = (this._x - this._y) * this.width_x;
-        // this.sprite.y = (this._x + this._y - (this._z * 2)) * (this.half_width_y);
-        // this.sprite.z = (this._z * 2) * (this.half_height);
+        // this.sprite.x = (this.x - this.y) * this.width_x;
+        // this.sprite.y = (this.x + this.y - (this.z * 2)) * (this.half_width_y);
+        // this.sprite.z = (this.z * 2) * (this.half_height);
 
         if (this.moves) {
             this.sprite.world.UpdateMotion(this);
@@ -175,11 +187,11 @@ class Body {
 
             this.new_velocity.set(new_x, new_y, new_z);
 
-            this._x += this.new_velocity.x;
-            this._y += this.new_velocity.y;
-            this._z += this.new_velocity.z;
+            this.x += this.new_velocity.x;
+            this.y += this.new_velocity.y;
+            this.z += this.new_velocity.z;
 
-            if (this._x != this.previous.x || this._y != this.previous.y || this._z != this.previous.z) {
+            if (this.x != this.previous.x || this.y != this.previous.y || this.z != this.previous.z) {
                 this.speed = Math.sqrt(this.velocity.x * this.velocity.x + this.velocity.y + this.velocity.z * this.velocity.z);
             }
         }        
@@ -189,13 +201,13 @@ class Body {
         this.a_comparison[1] = this.front_y;
         this.a_comparison[2] = this.top;
 
-        this.b_comparison[0] = this._x;
-        this.b_comparison[1] = this._y;
-        this.b_comparison[2] = this._z;
+        this.b_comparison[0] = this.x;
+        this.b_comparison[1] = this.y;
+        this.b_comparison[2] = this.z;
 
-        this.delta_x = this.delta_x;
-        this.delta_y = this.delta_y;
-        this.delta_z = this.delta_z;
+        this.delta_x = this.get_delta_x();
+        this.delta_y = this.get_delta_y();
+        this.delta_z = this.get_delta_z();
 
         this.reset = false;
     }
@@ -233,9 +245,9 @@ class Body {
         }
 
         if(this.moves) {
-            this.delta_x = this.delta_x;
-            this.delta_y = this.delta_y;
-            this.delta_z = this.delta_z;
+            this.delta_x = this.get_delta_x();
+            this.delta_y = this.get_delta_y();
+            this.delta_z = this.get_delta_z();
 
             //delta x != exceed max_delta
             if (this.max_delta.x != 0 && this.delta_x != 0) {
@@ -279,14 +291,14 @@ class Body {
     * @method {GetCorners} - Return the 8 corners of the cube
     **/
     public function GetCorners():Vector<Vector3> {
-        this.corners[0].set(this._x, this._y, this._z);
-        this.corners[1].set(this._x, this._y, this._z + this.height);
-        this.corners[2].set(this._x, this._y + this.width_y, this._z);
-        this.corners[3].set(this._x, this._y + this.width_y, this._z + this.height);
-        this.corners[4].set(this._x + this.width_x, this._y, this._z);
-        this.corners[5].set(this._x + this.width_x, this._y, this._z + this.height);
-        this.corners[6].set(this._x + this.width_x, this._y + this.width_y, this._z);
-        this.corners[7].set(this._x + this.width_x, this._y + this.width_y, this._z + this.height);
+        this.corners[0].set(this.x, this.y, this.z);
+        this.corners[1].set(this.x, this.y, this.z + this.height);
+        this.corners[2].set(this.x, this.y + this.width_y, this.z);
+        this.corners[3].set(this.x, this.y + this.width_y, this.z + this.height);
+        this.corners[4].set(this.x + this.width_x, this.y, this.z);
+        this.corners[5].set(this.x + this.width_x, this.y, this.z + this.height);
+        this.corners[6].set(this.x + this.width_x, this.y + this.width_y, this.z);
+        this.corners[7].set(this.x + this.width_x, this.y + this.width_y, this.z + this.height);
 
         return this.corners;
     }
@@ -313,40 +325,19 @@ class Body {
         return (this.delta_z > 0 ? this.delta_z : -this.delta_z);
     } 
 
-    public var delta_x(get, set):Float;
-    @:noCompletion
     public function get_delta_x():Float {
         return this.position.x - this.previous.x;
     }
 
-    @:noCompletion
-    public function set_delta_x(value:Float):Float {
-        return this.delta.x = FlxMath.roundDecimal(value, this.decimal);
-    }
-
-    public var delta_y(get, set):Float;
-    @:noCompletion
     public function get_delta_y():Float {
         return this.position.y - this.previous.y;
     }
 
-    @:noCompletion
-    public function set_delta_y(value:Float):Float {
-        return this.delta.y = value;
-    }
-
-    public var delta_z(get, set):Float;
-    @:noCompletion
     public function get_delta_z():Float {
         return this.position.z - this.previous.z;
     }    
 
-    @:noCompletion
-    public function set_delta_z(value:Float):Float {
-        return this.delta.z = value;
-    }
-
-    public var decimal:Int = 2;
+    public var decimal:Int = 3;
     public var top(get, null):Float;
     
     @:noCompletion
@@ -369,39 +360,39 @@ class Body {
     }                
 
 
-    public var _x(get, set):Float;
+    public var x(get, set):Float;
     
     @:noCompletion
-    public function set__x(value:Float):Float {                   
+    public function set_x(value:Float):Float {                   
         return this.position.x = FlxMath.roundDecimal(value, decimal);
     }
     
     @:noCompletion
-    public function get__x():Float {                   
+    public function get_x():Float {                   
         return this.position.x;
     }
 
-    public var _y(get, set):Float ;
+    public var y(get, set):Float ;
 
     @:noCompletion
-    public function set__y(value:Float):Float {           
+    public function set_y(value:Float):Float {           
         return this.position.y = FlxMath.roundDecimal(value, decimal);
     }
 
     @:noCompletion
-    public function get__y():Float {           
+    public function get_y():Float {           
         return this.position.y;
     }
 
-    public var _z(get, set):Float;
+    public var z(get, set):Float;
 
     @:noCompletion
-    public function set__z(value:Float):Float {
+    public function set_z(value:Float):Float {
         return this.position.z = FlxMath.roundDecimal(value, decimal);
     }     
 
     @:noCompletion
-    public function get__z():Float {
+    public function get_z():Float {
         return this.position.z;
     }     
 }
@@ -417,3 +408,4 @@ enum Facing {
     Up;
     Down;
 }
+

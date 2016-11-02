@@ -13,6 +13,9 @@ class Block extends IsoSprite {
         super(x, y, z, graphic);        
         this.entity = "Block";
         this.active = false;
+        this.iso_bounds.weight = 10;
+        this.iso_bounds.immovable = true;
+        
     }
     
     override public function update(elapsed:Float) {
