@@ -19,6 +19,8 @@ class Body {
 
     public var offset:Vector3 = new Vector3(0, 0, 0);
 
+    public var center:Vector3 = new Vector3(0, 0, 0);
+
     public var position:Vector3 = new Vector3(0, 0, 0);
 
     public var previous = new Vector3(0, 0, 0);
@@ -35,11 +37,11 @@ class Body {
 
     public var acceleration:Vector3 = new Vector3(0, 0, 0);
 
-    public var drag:Vector3 = new Vector3(0, 0, 0);
+    public var drag:Vector3 = new Vector3(10, 10, 10);
     
     public var max_velocity:Vector3 = new Vector3(1000, 1000, 1000);
 
-    public var bounce:Vector3 = new Vector3(10, 10, 10);
+    public var bounce:Vector3 = new Vector3(0, 0, 0);
 
     public var max_delta:Vector3 = new Vector3(0, 0, 0);
 
@@ -120,6 +122,12 @@ class Body {
         this.half_width_y = (this.width_y * 0.5);
         this.half_height = (this.height * 0.5);
 
+        var center_x = this.x + this.width_x;
+        var center_y = this.y + this.width_y;
+        var center_z = this.z + this.half_height;
+
+        this.center.set(center_x, center_y, center_z);
+
 
         
 
@@ -158,7 +166,7 @@ class Body {
 
         this.implanted = false;
 
-        this.current_overlap = CollideSide.none;
+        // this.current_overlap = CollideSide.none;
         
         this.x = this.sprite.iso_x + ((this.width_x * -this.sprite.anchor.x) + this.width_x * 0.5) + this.offset.x;
         this.y = this.sprite.iso_y + ((this.width_y * this.sprite.anchor.x) - this.width_y * 0.5) + this.offset.y;

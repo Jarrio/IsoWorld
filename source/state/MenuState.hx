@@ -173,10 +173,9 @@ class MenuState extends FlxState {
 
 		group.sort(SortBy3d, FlxSort.DESCENDING);
 		
-		var intersects = this.world.intersects(player.iso_bounds, group.members[0].iso_bounds);
-		var collide = this.world.Seperate(player.iso_bounds, group.members[0].iso_bounds, false);
+		this.world.Seperate(player.iso_bounds, group.members[0].iso_bounds, false);
 		
-		// FlxG.watch.addQuick("Intersects", intersects);		
+		//FlxG.watch.addQuick("Intersects", intersects);		
 		// FlxG.watch.addQuick("CollisionX", collide);
 		// FlxG.watch.addQuick("overlap", this.world.overlap);
 		// FlxG.watch.addQuick("max overlap", this.world.max_overlap);

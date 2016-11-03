@@ -53,6 +53,8 @@ class IsoSprite extends FlxSprite {
             iso_z = z;
         }
 
+        this.offset.set(this.iso_bounds.center.x, this.iso_bounds.center.y);
+        
 
 
         ResetIsoBounds();          

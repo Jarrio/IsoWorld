@@ -87,7 +87,7 @@ class World {
         return FlxMath.roundDecimal(velocity, this.decimal);
     }
 
-    
+
 
     public var overlap:Float;
     public var max_overlap:Float;
@@ -100,8 +100,6 @@ class World {
     public function Seperate(a:Body, b:Body, overlapOnly:Bool):Bool {
         if (!this.intersects(a, b)) return false;
 
-        if (overlapOnly) return true;
-
         var az_gravity = Math.abs(this.gravity.z + a.gravity.z);
         var ax_gravity = Math.abs(this.gravity.x + a.gravity.x);
         var ay_gravity = Math.abs(this.gravity.y + a.gravity.y);
@@ -111,20 +109,19 @@ class World {
         var check_y = this.SeperateY(a, b, overlapOnly);
         var check_z = this.SeperateZ(a, b, overlapOnly);
 
-        if (az_gravity < ax_gravity || az_gravity < ay_gravity) {
         //    this.result = (check_x & check_y) | (check_y & check_z) | (check_z & check_x);
             // this.result = check_x ? (check_y || check_z) : (check_y && check_z);
-            if (check_x || check_y || check_z) {
-                this.result = true;
-            }
-        } else {
-        //    this.result = (check_z & check_x) | (check_x & check_y) | (check_y & check_z);
-           if (check_z || check_x || check_y) {
-               this.result = true;
-           }
-        }
+        // if ((check_x && check_y) || (check_y && check_z) || (check_x && check_z)) {
+        //     this.result = true;
+        // }
 
-        return this.result;
+        if (check_x && check_z) {
+            return true;
+        } else if (check_y && check_z) {
+            return true;
+        }
+        
+        return false; 
     }
 
     public var new_velocity_a:Float;
@@ -149,7 +146,7 @@ class World {
                 b.implanted = true;                
             } else if (a.delta_x > b.delta_x) {
                 this.overlap = (a.front_x - b.x) - a.width_x;
-                // trace('(A>B) | max: ${this.max_overlap} | ${this.overlap}');                
+                           
                 if ((this.overlap > this.max_overlap) || a.check_collision.front_x == false || b.check_collision.back_x == false) {
                     this.overlap = 0;
                 } else {
@@ -163,14 +160,17 @@ class World {
                     b.current_overlap = CollideSide.back_x; 
 
                 }
+
+                // trace('0 - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                     
             } else if (a.delta_x < b.delta_x) {
-                
+                // trace('(A<B) | max: ${this.max_overlap} | ${this.overlap}');
                 this.overlap = (b.front_x - a.x) - b.width_x;
                 
-                if ((-this.overlap > this.max_overlap) || a.check_collision.back_x == false || b.check_collision.front_x == false) {                                        
+                if ((-this.overlap > this.max_overlap) || a.check_collision.back_x == false || b.check_collision.front_x == false) {
                     this.overlap = 0;
                 } else {
-                    // trace('(A<B) | max: ${this.max_overlap} | ${this.overlap}');                    
+                    // trace('1 - (A<B) | max: ${this.max_overlap} | ${-this.overlap}');    
+                    // trace('Worked - (A<B) | max: ${this.max_overlap} | ${this.overlap}');                
                     a.touching.none = false;
                     a.touching.back_x = true;
                     a.current_overlap = CollideSide.back_x;  
@@ -180,11 +180,12 @@ class World {
                     b.current_overlap = CollideSide.front_x; 
             
                 }
+
+                // trace('End - (A<B) | max: ${this.max_overlap} | ${this.overlap}');
             }
         }
 
         if (this.overlap != 0) {           
-            // trace('Worked - max: ${this.max_overlap} | ${this.overlap}');
             a.overlap_x = this.overlap;
             b.overlap_x = this.overlap;
 
@@ -230,10 +231,8 @@ class World {
         this.overlap = 0;
 
         if (this.intersects(a, b)) {
-            // this.max_overlap = Math.abs(a.delta_x) + Math.abs(b.delta_x) + this.overlap_bias;
+            // this.max_overlap = Math.abs(a.delta_y) + Math.abs(b.delta_y) + this.overlap_bias;
             this.max_overlap = a.abs_delta_y + b.abs_delta_y + this.overlap_bias;
-
-
 
             if (a.delta_y == 0 && b.delta_y == 0) {
                 a.implanted = true;
@@ -241,40 +240,43 @@ class World {
             } else if (a.delta_y > b.delta_y) {
                 this.overlap = (a.front_y - b.y) - a.width_y;
                            
-                if ((this.overlap > this.max_overlap) || a.check_collision.front_y == false || b.check_collision.back_y == false) {
-                    trace('0 -(A>B) | max: ${this.max_overlap} | ${this.overlap}');     
+                if ((this.overlap > this.max_overlap) || a.check_collision.front_y == false || b.check_collision.back_y == false) {                  
                     this.overlap = 0;
                 } else {
                     // trace('(A>B) | max: ${this.max_overlap} | ${this.overlap}');
+
                     a.touching.none = false;
                     a.touching.back_y = true;
-                    a.current_overlap = CollideSide.back_y;
-                    
-                    b.touching.none = false;
-                    b.touching.front_y = true;
-                    b.current_overlap = CollideSide.front_y;
-                }
-            } else if (a.delta_y < b.delta_y) {
-                
-                this.overlap = (b.front_y - a.y) - b.width_y;
-                
-                if ((-this.overlap > this.max_overlap) || a.check_collision.back_y == false || b.check_collision.front_y == false) {                                        
-                    this.overlap = 0;
-                } else {
-                    // trace('(A<B) | max: ${this.max_overlap} | ${this.overlap}');                    
-                    a.touching.none = false;
-                    a.touching.front_y = true;
-                    a.current_overlap = CollideSide.front_y;
+                    a.current_overlap = CollideSide.back_y;  
 
                     b.touching.none = false;
-                    b.touching.back_y = true;                    
-                    b.current_overlap = CollideSide.back_y;
+                    b.touching.front_y = true;      
+                    b.current_overlap = CollideSide.front_y; 
                 }
+
+                // trace('0 - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                     
+            } else if (a.delta_y < b.delta_y) {
+                this.overlap = (b.front_y - a.y) - b.width_y;
+                
+                if ((-this.overlap > this.max_overlap) || a.check_collision.back_y == false || b.check_collision.front_y == false) {
+                    this.overlap = 0;
+                } else {
+                    // trace('1 - (A<B) | max: ${this.max_overlap} | ${-this.overlap}');                                     
+
+                    a.touching.none = false;
+                    a.touching.front_y = true;
+                    a.current_overlap = CollideSide.front_y; 
+
+                    b.touching.none = false;
+                    b.touching.back_y = true;
+                    b.current_overlap = CollideSide.back_y;             
+                }
+
+                // trace('End - (A<B) | max: ${this.max_overlap} | ${this.overlap}');
             }
         }
 
         if (this.overlap != 0) {           
-            trace('Worked - max: ${this.max_overlap} | ${this.overlap}');
             a.overlap_y = this.overlap;
             b.overlap_y = this.overlap;
 
@@ -312,7 +314,7 @@ class World {
         }
 
         return false; 
-    }    
+    }
 
     public function SeperateZ(a:Body, b:Body, overlapOnly:Bool):Bool {
         if(a.immovable && b.immovable) return false;
@@ -320,48 +322,52 @@ class World {
         this.overlap = 0;
 
         if (this.intersects(a, b)) {
-            // this.max_overlap = Math.abs(a.delta_x) + Math.abs(b.delta_x) + this.overlap_bias;
+            // this.max_overlap = Math.abs(a.delta_z) + Math.abs(b.delta_z) + this.overlap_bias;
             this.max_overlap = a.abs_delta_z + b.abs_delta_z + this.overlap_bias;
 
             if (a.delta_z == 0 && b.delta_z == 0) {
                 a.implanted = true;
                 b.implanted = true;                
             } else if (a.delta_z > b.delta_z) {
-                this.overlap = (a.top - b.z) - a.height;
-                // trace('(A>B) | max: ${this.max_overlap} | ${this.overlap}');                
-                if ((this.overlap > this.max_overlap) || a.check_collision.bottom == false || b.check_collision.top == false) {
+                this.overlap = (a.top - b.z) - a.width_y;
+                           
+                if ((this.overlap > this.max_overlap) || a.check_collision.top == false || b.check_collision.bottom == false) {                  
                     this.overlap = 0;
                 } else {
                     // trace('(A>B) | max: ${this.max_overlap} | ${this.overlap}');
-                    a.touching.none = false;
-                    a.touching.top = true;
-                    a.current_overlap = CollideSide.top;
 
-                    b.touching.none = false;
-                    b.touching.bottom = true;
-                    b.current_overlap = CollideSide.bottom;
-                }
-            } else if (a.delta_z < b.delta_z) {
-                
-                this.overlap = (b.top - a.z) - b.height;
-                
-                if ((-this.overlap > this.max_overlap) || a.check_collision.top == false || b.check_collision.bottom == false) {                                        
-                    this.overlap = 0;
-                } else {
-                    // trace('(A<B) | max: ${this.max_overlap} | ${this.overlap}');                    
                     a.touching.none = false;
                     a.touching.bottom = true;
-                    a.current_overlap = CollideSide.bottom;
+                    a.current_overlap = CollideSide.bottom;  
 
                     b.touching.none = false;
                     b.touching.top = true;      
-                    b.current_overlap = CollideSide.top;              
+                    b.current_overlap = CollideSide.top; 
                 }
+
+                // trace('0 - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                     
+            } else if (a.delta_z < b.delta_z) {
+                this.overlap = (b.top - a.z) - b.width_y;
+                
+                if ((-this.overlap > this.max_overlap) || a.check_collision.bottom == false || b.check_collision.top == false) {
+                    this.overlap = 0;
+                } else {
+                    // trace('1 - (A<B) | max: ${this.max_overlap} | ${-this.overlap}');                                     
+
+                    a.touching.none = false;
+                    a.touching.top = true;
+                    a.current_overlap = CollideSide.top; 
+
+                    b.touching.none = false;
+                    b.touching.bottom = true;
+                    b.current_overlap = CollideSide.bottom;             
+                }
+
+                // trace('End - (A<B) | max: ${this.max_overlap} | ${this.overlap}');
             }
         }
 
         if (this.overlap != 0) {           
-            // trace('Worked - max: ${this.max_overlap} | ${this.overlap}');
             a.overlap_z = this.overlap;
             b.overlap_z = this.overlap;
 
@@ -375,8 +381,8 @@ class World {
             if (!a.immovable && !b.immovable) {
                 this.overlap *= 0.5;
 
-                a.y = a.y - this.overlap;
-                b.y += this.overlap;
+                a.z = a.z - this.overlap;
+                b.z += this.overlap;
 
                 this.new_velocity_a = (this.b_overlap_velocity * this.b_overlap_velocity * b.weight) / a.weight * ((this.b_overlap_velocity > 0) ? 1 : -1);
                 this.new_velocity_b = (this.a_overlap_velocity * this.a_overlap_velocity * a.weight) / b.weight * ((this.a_overlap_velocity > 0) ? 1 : -1);
@@ -399,7 +405,7 @@ class World {
         }
 
         return false; 
-    }        
+    }
 }
 
 enum Axis {

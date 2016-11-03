@@ -18,7 +18,7 @@ class Depth {
         sprite.iso_bounds.PreUpdate();
         sprite.x = (FlxG.width / 2) + (sprite.iso_x - sprite.iso_y) * sprite.iso_bounds.width_x;
         sprite.y = (FlxG.height / 2) + (sprite.iso_x + sprite.iso_y - (sprite.iso_z * 2)) * (sprite.iso_bounds.half_width_y);
-        sprite.z = (sprite.iso_z * 2) * (sprite.iso_bounds.half_height);     
+
         sprite.iso_bounds.PostUpdate();
         
    
