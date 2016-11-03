@@ -31,7 +31,7 @@ class Player extends IsoSprite {
             if (!this.iso_bounds.touching.front_y) { 
                 this.iso_bounds.velocity.y = -speed;
             } else {
-                this.iso_bounds.velocity.y -= -speed;
+                 this.iso_bounds.velocity.y += speed;
             }
             
         } else if (FlxG.keys.anyPressed(['S', 'Down'])) {
@@ -39,7 +39,7 @@ class Player extends IsoSprite {
             if (!this.iso_bounds.touching.back_y) { 
                 this.iso_bounds.velocity.y = speed;
             } else {
-                this.iso_bounds.velocity.y += speed;
+                 this.iso_bounds.velocity.y -= speed;
             }
         } else {
             this.iso_bounds.velocity.y = 0;
@@ -50,7 +50,7 @@ class Player extends IsoSprite {
             if (!this.iso_bounds.touching.back_x) { 
                 this.iso_bounds.velocity.x = -speed;
             } else { 
-                this.iso_bounds.velocity.x -= speed;
+                this.iso_bounds.velocity.x += speed;
             }
 
         } else if (FlxG.keys.anyPressed(['D', 'Right'])) {
@@ -58,7 +58,7 @@ class Player extends IsoSprite {
             if(!this.iso_bounds.touching.front_x) {
                 this.iso_bounds.velocity.x = speed;
             } else {
-                this.iso_bounds.velocity.x = -speed;
+                this.iso_bounds.velocity.x -= speed;
             }
 
         } else {
