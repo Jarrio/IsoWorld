@@ -17,7 +17,7 @@ class Body {
 
     public var sprite:IsoSprite;
 
-    public var offset:Vector3 = new Vector3(0, 0, 0);
+    public var offset:Vector3 = new Vector3(-32, 0, 0);
 
     public var center:Vector3 = new Vector3(0, 0, 0);
 
@@ -33,7 +33,7 @@ class Body {
 
     public var new_velocity:Vector3 = new Vector3(0, 0, 0);
     
-    public var speed:Float;
+    public var speed:Float = 0;
 
     public var acceleration:Vector3 = new Vector3(0, 0, 0);
 
@@ -41,7 +41,7 @@ class Body {
     
     public var max_velocity:Vector3 = new Vector3(1000, 1000, 1000);
 
-    public var bounce:Vector3 = new Vector3(0, 0, 0);
+    public var bounce:Vector3 = new Vector3(1, 1, 1);
 
     public var max_delta:Vector3 = new Vector3(0, 0, 0);
 
@@ -122,11 +122,7 @@ class Body {
         this.half_width_y = (this.width_y * 0.5);
         this.half_height = (this.height * 0.5);
 
-        var center_x = this.x + this.width_x;
-        var center_y = this.y + this.width_y;
-        var center_z = this.z + this.half_height;
-
-        this.center.set(center_x, center_y, center_z);
+        this.center.set(this.x + (this.width_x), this.y + this.width_y, this.z + this.half_height);
 
 
         
@@ -170,13 +166,14 @@ class Body {
         
         this.x = this.sprite.iso_x + ((this.width_x * -this.sprite.anchor.x) + this.width_x * 0.5) + this.offset.x;
         this.y = this.sprite.iso_y + ((this.width_y * this.sprite.anchor.x) - this.width_y * 0.5) + this.offset.y;
-        this.z = this.sprite.iso_z - (Math.abs(this.sprite.height) * (1 - this.sprite.anchor.y)) + (Math.abs(this.sprite.width * 0.5)) + this.offset.z;        
-                
+        // this.z = this.sprite.iso_z - (Math.abs(this.sprite.height * 0.5) * (1 - this.sprite.anchor.y)) + (Math.abs(this.sprite.width * 0.5)) + this.offset.z;        
+        this.z = this.sprite.iso_z - ((Math.abs((this.height * 0.5)) * (1 - this.sprite.anchor.y)));                
         if (this.reset || this.just_started) {
             this.previous.x = this.x;
             this.previous.y = this.y;
             this.previous.z = this.z;
 
+            this.sprite.offset.set(this.center.x, this.center.y);
             // this.x = (FlxG.width / 2) + (this.sprite.iso_x - this.sprite.iso_y) * this.width_x;
             // this.y = (FlxG.height / 2) + (this.sprite.iso_x + this.sprite.iso_y - (this.sprite.iso_z * 2)) * (this.half_width_y);
             // this.z = (this.sprite.iso_z * 2) * (this.half_height);     
@@ -288,6 +285,8 @@ class Body {
 
             //trace('this.delta_x: ${this.delta_x} | this.delta_y: ${this.delta_y} | this.delta_z: ${this.delta_z} ');                      
         }
+
+        this.center.set(this.x + this.half_width_x, this.y + this.half_width_y, this.z + this.half_height);
 
         this.previous.x = this.position.x;
         this.previous.y = this.position.y;

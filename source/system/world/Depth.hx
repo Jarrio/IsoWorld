@@ -1,6 +1,7 @@
 package system.world;
 
 import haxe.ds.Vector;
+import hxmath.math.Vector3;
 import system.entities.IsoSprite; 
 import flixel.FlxG;
 
@@ -15,14 +16,22 @@ class Depth {
     }
 
     public function update_bounding_cube(sprite:IsoSprite) {
-        sprite.iso_bounds.PreUpdate();
+        sprite.iso_bounds.PreUpdate();        
         sprite.x = (FlxG.width / 2) + (sprite.iso_x - sprite.iso_y) * sprite.iso_bounds.width_x;
         sprite.y = (FlxG.height / 2) + (sprite.iso_x + sprite.iso_y - (sprite.iso_z * 2)) * (sprite.iso_bounds.half_width_y);
-
+        sprite.z = (sprite.iso_z * 2) * (sprite.iso_bounds.half_height);           
         sprite.iso_bounds.PostUpdate();
-        
-   
     }
+
+    public function transform_to_iso(x:Float, y:Float, z:Float, width_x:Float, half_width_y:Float, half_height:Float):Vector3 {
+
+        var new_x = (FlxG.width / 2) + (x - y) * width_x;
+        var new_y = (FlxG.height / 2) + (x + y - (z * 2)) * (half_width_y);
+        var new_z = (z * 2) * (half_height);           
+
+        var point = new Vector3(new_x, new_y, new_z);
+        return point;
+    }    
 
     public function find_overlaps(a_object:Vector<Float>, b_object:Vector<Float>):Bool {
         //var bounds = a_object.iso_bounds;

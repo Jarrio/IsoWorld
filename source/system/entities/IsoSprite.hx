@@ -12,6 +12,9 @@ import hxmath.math.Vector3;
 import system.entities.physics.Cube;
 import system.entities.physics.Body;
 import system.world.World;
+import flixel.addons.effects.chainable.FlxOutlineEffect;
+import flixel.addons.effects.chainable.FlxOutlineEffect.FlxOutlineMode;
+import flixel.util.FlxColor;
 
 class IsoSprite extends FlxSprite {
     
@@ -28,7 +31,7 @@ class IsoSprite extends FlxSprite {
     //@optimise iso_sprites_behind no reason to store more sprites
     public var iso_sprites_behind:Array<IsoSprite> = new Array<IsoSprite>();
 
-    public var anchor = new Vector2(0, 0);
+    public var anchor = new Vector2(0.5, 0.5);
     
     public var entity:String;
     
@@ -53,9 +56,7 @@ class IsoSprite extends FlxSprite {
             iso_z = z;
         }
 
-        this.offset.set(this.iso_bounds.center.x, this.iso_bounds.center.y);
-        
-
+        this.offset.set(this.iso_bounds.x, this.iso_bounds.y);
 
         ResetIsoBounds();          
 
@@ -118,7 +119,7 @@ class IsoSprite extends FlxSprite {
 
         this.iso_bounds.x = this.iso_x + (this.iso_bounds.width_x * this.anchor.x) + (this.iso_bounds.width_x);
         this.iso_bounds.y = this.iso_y + (this.iso_bounds.half_width_y * this.anchor.x) - (this.iso_bounds.half_width_y);
-        this.iso_bounds.z = this.iso_z - (Math.abs(this.height) * (1 - this.anchor.y)) + (Math.abs(this.width * 0.5));
+        this.iso_bounds.z = this.iso_z - (Math.abs((this.height * 0.5)) * (1 - this.anchor.y)) + (Math.abs(this.width * 0.5));
  
     }
 

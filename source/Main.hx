@@ -16,7 +16,7 @@ class Main extends Sprite {
 		#if (debug && cpp)
 			new debugger.HaxeRemote(false, "localhost");
 		#end
-		
+
 		addChild(new FlxGame(1280, 720, MenuState));
 	}
 }
