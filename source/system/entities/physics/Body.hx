@@ -8,7 +8,6 @@ import system.constants.Physics.Touching;
 import system.constants.Physics.PreviousTouching;
 import system.constants.Physics.Blocked;
 import haxe.ds.Vector;
-
 import system.entities.IsoSprite;
 import system.constants.Physics;
 
@@ -17,7 +16,7 @@ class Body {
 
     public var sprite:IsoSprite;
 
-    public var offset:Vector3 = new Vector3(-32, 0, 0);
+    public var offset:Vector3 = new Vector3(0, 0, 0);
 
     public var center:Vector3 = new Vector3(0, 0, 0);
 
@@ -37,11 +36,11 @@ class Body {
 
     public var acceleration:Vector3 = new Vector3(0, 0, 0);
 
-    public var drag:Vector3 = new Vector3(10, 10, 10);
+    public var drag:Vector3 = new Vector3(0, 0, 0);
     
     public var max_velocity:Vector3 = new Vector3(1000, 1000, 1000);
 
-    public var bounce:Vector3 = new Vector3(1, 1, 1);
+    public var bounce:Vector3 = new Vector3(0, 0, 0);
 
     public var max_delta:Vector3 = new Vector3(0, 0, 0);
 
@@ -80,6 +79,7 @@ class Body {
     public var immovable:Bool = false;
 
     public var weight:Float = 1;
+    
 
     /**
     * @property {wasTouching} - Previous touching values
@@ -131,6 +131,10 @@ class Body {
         //this.previous_position.set(this.position.x, this.position.y, this.position.z);
     }
 
+    public var x_width:Float = 1;
+    public var y_width:Float = 1;
+    public var z_width:Float = 1;
+
     public function PreUpdate() {
         if (!this.pre_update) return;
 
@@ -164,17 +168,24 @@ class Body {
 
         // this.current_overlap = CollideSide.none;
         
-        this.x = this.sprite.iso_x + ((this.width_x * -this.sprite.anchor.x) + this.width_x * 0.5) + this.offset.x;
-        this.y = this.sprite.iso_y + ((this.width_y * this.sprite.anchor.x) - this.width_y * 0.5) + this.offset.y;
+        
+        // this.x = this.sprite.iso_x + ((this.width_x * -this.sprite.anchor.x) + this.width_x * 0.5) + this.offset.x;
+        // this.y = this.sprite.iso_y + ((this.width_y * this.sprite.anchor.x) - this.width_y * 0.5) + this.offset.y;
+        // this.z = this.sprite.iso_z - ((Math.abs((this.height * 0.5)) * (1 - this.sprite.anchor.y)));
+        this.x = this.sprite.iso_x + this.x_width;
+        this.y = this.sprite.iso_y + this.y_width;
+        this.z = this.sprite.iso_z - this.z_width;
+
+        
         // this.z = this.sprite.iso_z - (Math.abs(this.sprite.height * 0.5) * (1 - this.sprite.anchor.y)) + (Math.abs(this.sprite.width * 0.5)) + this.offset.z;        
-        this.z = this.sprite.iso_z - ((Math.abs((this.height * 0.5)) * (1 - this.sprite.anchor.y)));                
+                        
         if (this.reset || this.just_started) {
             this.previous.x = this.x;
             this.previous.y = this.y;
             this.previous.z = this.z;
 
             this.sprite.offset.set(this.center.x, this.center.y);
-            // this.x = (FlxG.width / 2) + (this.sprite.iso_x - this.sprite.iso_y) * this.width_x;
+            // this.x = (this.sprite.iso_x - this.sprite.iso_y) * this.width_x;
             // this.y = (FlxG.height / 2) + (this.sprite.iso_x + this.sprite.iso_y - (this.sprite.iso_z * 2)) * (this.half_width_y);
             // this.z = (this.sprite.iso_z * 2) * (this.half_height);     
             if (this.just_started) this.just_started = false;
@@ -185,7 +196,7 @@ class Body {
         // this.sprite.z = (this.z * 2) * (this.half_height);
 
         if (this.moves) {
-            this.sprite.world.UpdateMotion(this);
+            this.sprite.world.game.UpdateMotion(this);
             var new_x = FlxMath.roundDecimal(this.velocity.x * FlxG.elapsed, this.decimal);
             var new_y = FlxMath.roundDecimal(this.velocity.y * FlxG.elapsed, this.decimal);
             var new_z = FlxMath.roundDecimal(this.velocity.z * FlxG.elapsed, this.decimal);
@@ -349,21 +360,24 @@ class Body {
     
     @:noCompletion
     public function get_top():Float {           
-        return FlxMath.roundDecimal(this.position.z + (this.height), decimal);
+        return FlxMath.roundDecimal(this.position.z + this.z_width, decimal);
+        // return FlxMath.roundDecimal(this.position.z + this.height, decimal);
     }
 
     public var front_x(get, null):Float;
 
     @:noCompletion
     public function get_front_x():Float {
-        return FlxMath.roundDecimal(this.position.x + (this.width_x), decimal);
+        return FlxMath.roundDecimal(this.position.x + this.x_width, decimal);
+        // return FlxMath.roundDecimal(this.position.x + this.width_x, decimal);
     }
 
     public var front_y(get, null):Float;
 
     @:noCompletion
     public function get_front_y():Float {
-        return FlxMath.roundDecimal(this.position.y + (this.width_y), decimal);
+        return FlxMath.roundDecimal(this.position.y + this.y_width, decimal);
+        // return FlxMath.roundDecimal(this.position.y + this.y_width, decimal);
     }                
 
 

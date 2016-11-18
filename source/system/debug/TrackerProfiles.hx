@@ -23,7 +23,7 @@ class TrackerProfiles {
     }
 
     private function BodyProfile() {
-        var profile = new TrackerProfile(Body, ["position","velocity", "current_overlap", "overlap_y", "overlap_x", "facing"]);
+        var profile = new TrackerProfile(Body, ["speed", "delta_x", "delta_y", "delta_z", "position", "previous", "velocity", "current_overlap", "overlap_y", "overlap_z", "overlap_x", "facing"]);
         profiles.push(profile);
     }
 }

@@ -10,7 +10,7 @@ import system.entities.IsoSprite;
 
 class World {
 
-    public var gravity:Vector3 = new Vector3(0, 0, -100);
+    public var gravity:Vector3 = new Vector3(0, 0, 0);
     public var drag:Float = 0;
     public var total:Int;
 
@@ -19,111 +19,6 @@ class World {
     public function new() {
     }
 
-    public function intersects(a:Body, b:Body):Bool {
-
-        // var a_max = a.a_comparison;
-        // var b_min = b.b_comparison;
-        var padding = 0;
-        var a_min_max_x = (a.x + padding < b.front_x - padding);
-        var a_max_min_x = (a.front_x + padding > b.x - padding);
-
-        var a_min_max_y = (a.y + padding < b.front_y - padding);
-        var a_max_min_y = (a.front_y + padding > b.y - padding);
-
-        var a_min_max_z = (a.z + padding < b.top - padding);
-        var a_max_min_z = (a.top + padding > b.z - padding);
-
-        if (a_min_max_z && a_max_min_z) {
-            if (a_min_max_x && a_max_min_x) {
-                if (a_min_max_y && a_max_min_y) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-
-        if (a.x + padding < b.front_x - padding) {
-            return false;
-        }
-
-        if (a.front_x + padding < b.x - padding) {
-            return false;
-        }
-            
-        if (a.y + padding > b.front_y - padding) {
-            return false;
-        }
-        
-        if (a.front_y + padding < b.y - padding) {
-            return false;
-        }
-
-
-        if (a.z + padding > b.top - padding) {
-            return false;   
-        }
-        
-        if (a.top + padding < b.z - padding) {
-            return false;
-        }
-        trace("True");
-        return true;        
-         
-
-        // if (a.front_x <= b.x) {
-        //     return false; 
-        // }
-
-        // if (a.x >= b.front_x) {
-        //     return false; 
-        // }
-
-        // if (a.front_y <= b.y) {
-        //     return false; 
-        // }
-
-        // if (a.y >= b.front_y) {
-        //     return false; 
-        // }
-
-        // if (a.top <= b.z) {
-        //     return false;
-        // }                                
-
-        // if (a.z >= b.top) {
-        //     return false;
-        // }        
-
-        // return true;
-
-        // if (a.x >= b.front_x) {
-        //     return false;
-        // }
-
-        // if (b.x >= a.front_x) {
-        //     return false;
-        // }
-
-        // if (a.y >= b.front_y) {
-        //     return false;
-        // }
-
-        // if (b.y >= a.front_y) {
-        //     return false;
-        // }
-
-        // if (a.z >= b.top) {
-        //     return false;
-        // }
-
-        // if (b.z >= a.top) {
-        //     return false;
-        // }
-
-        // return true;
-        // return !(a.x >= b.front_x || b.x >= a.front_x) && !(a.y >= b.front_y || b.y >= a.front_y) && !(a.z >= b.top || b.z >= a.top);
-    }
 
     public function UpdateMotion(body:Body):Void {
         body.velocity.x = this.ComputeVelocity(Axis.x, body, body.velocity.x, body.acceleration.x, body.drag.x, body.max_velocity.x);
@@ -178,16 +73,24 @@ class World {
     public var a_overlap_velocity:Float;
     public var b_overlap_velocity:Float;
 
-    public function Collide(a:IsoSprite, b:IsoSprite):Bool {
+    public function Collide(a:IsoSprite, b:Dynamic):Bool {
         this.result = false;
         this.total = 0;
 
-        this.CollideSprites(a, b, false);
+        if (Type.getClass(b) == Array) {
+            for (i in 0...b.length) {
+                this.CollideSprites(a, b[i], false);
+            }
+        } else {
+            this.CollideSprites(a, b, false);
+        }
         return (this.total > 0);
     }
 
-    public function CollideHandler(a:Dynamic, ?b:IsoSprite, overlap:Bool):Void {
-        if (Type.getClassName(a) == "FlxTypedSpriteGroup" && b == null) {
+    public function CollideHandler(a:IsoSprite, ?b:Dynamic, overlap:Bool):Void {
+
+
+        if (Type.getClassName(b) == "FlxTypedSpriteGroup" && b == null) {
             //collide vs self
         }
 
@@ -196,32 +99,36 @@ class World {
         }
     }
 
+    public function CollideSpriteVsGroup(sprite:IsoSprite, group:Array<IsoSprite>, overlap:Bool) {
+        for (i in 0...group.length) {
+            this.CollideSprites(sprite, group[i], overlap);
+        }
+    }
+
     public function CollideSprites(a:IsoSprite, b:IsoSprite, overlap:Bool):Bool {
         if (a.iso_bounds == null || b.iso_bounds == null) {
             return false;
         }
-
+                        
         if(this.Seperate(a.iso_bounds, b.iso_bounds, overlap)) {
             this.total++;
-//            trace("Collided");
         }
 
         return true;
     }
 
-    public function Seperate(a:Body, b:Body, overlap:Bool):Bool {
-        if (this.intersects(a, b) == false) return false;
+
+
+    public function Seperate(a:Body, b:Body, _overlap:Bool):Bool {
+        if (!this.intersects(a, b)) {
+            return false;
+        }
 
         this.overlap = 0;
 
         var az_gravity = Math.abs(this.gravity.z + a.gravity.z);
         var ax_gravity = Math.abs(this.gravity.x + a.gravity.x);
         var ay_gravity = Math.abs(this.gravity.y + a.gravity.y);
-
-
-        var check_x = this.SeperateX(a, b, overlap);
-        var check_y = this.SeperateY(a, b, overlap);
-        var check_z = this.SeperateZ(a, b, overlap);
 
         //    this.result = (check_x & check_y) | (check_y & check_z) | (check_z & check_x);
             // this.result = check_x ? (check_y || check_z) : (check_y && check_z);
@@ -230,49 +137,60 @@ class World {
         // }
 
         if (az_gravity < ax_gravity || az_gravity < ay_gravity) {
-            if (check_x && check_z) {
-                // trace("1SeperateX == true");
-                return true;                
-            }
-
-            if (check_y && check_z) {
-                // trace("1SeperateY == true");                
-                return true;                    
-            }
-
-            if (check_z) {
-                // trace("1SeperateZ == true");
-                return true;
-            }
-            return false;
+            
+            this.result = this.SeperateX(a, b, _overlap);
+            this.result = this.SeperateY(a, b, _overlap);
+            this.result = this.SeperateZ(a, b, _overlap);
         } else {
-
-            if (check_z) {
-                return true;
-            }
-
-            if (check_x && check_z) {
-                // trace("2SeperateX == true");
-                return true;
-            }
-
-            if (check_y && check_z) {
-                // trace("3SeperateY == true");
-                return true;                                
-            }
+            
+            this.result = this.SeperateZ(a, b, _overlap);
+            this.result = this.SeperateX(a, b, _overlap);
+            this.result = this.SeperateY(a, b, _overlap);
 
             // trace("Seperate == false");
         }
 
-        return false;
+        return this.result;
+    }
+
+    public var padding:Float= 0.01;
+
+    public function intersects(a:Body, b:Body):Bool {
+        
+        if (a.front_x - padding <= b.x + padding) {
+            return false;
+        }
+
+        if (a.front_y - padding <= b.y + padding) {
+            return false;
+        }
+
+        if (a.x + padding >= b.front_x - padding ) {
+            return false;
+        }
+
+        if (a.y + padding  >= b.front_y - padding ) {
+            return false;
+        }
+
+        if (a.top - padding <= b.z + padding ) {
+            return false;
+        }
+
+        if (a.z + padding >= b.top - padding ) {
+            return false;
+        }
+
+        return true;
     }
 
     public var new_velocity_a:Float;
     public var new_velocity_b:Float;
     public var average:Float;
     
-    public var overlap_bias:Float = 1;
+    public var overlap_bias:Float = 0.099;
     public var min_overlap:Float;
+    public var overlap_padding:Float = 0.0;
 
     public function SeperateX(a:Body, b:Body, overlap:Bool):Bool {
         if(a.immovable && b.immovable) return false;
@@ -286,19 +204,14 @@ class World {
                 a.implanted = true;
                 b.implanted = true;                
             } else if (a.delta_x > b.delta_x) {
-                this.overlap = FlxMath.roundDecimal((a.x) - (b.x), this.decimal);
+                this.overlap = FlxMath.roundDecimal(a.front_x - b.x, this.decimal) + this.overlap_padding;
 
                 
                 if ((this.overlap > this.max_overlap) || !a.check_collision.front_x || !b.check_collision.back_x) {
-                    // trace('X: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');    
-                    // FlxG.watch.addQuick("X (A>B): Failed", true);
-                    // FlxG.watch.addQuick("X (A>B): Worked", false);                                                          
+                    trace('1X: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                                                              
                     this.overlap = 0;
                 } else {
-                    // FlxG.watch.addQuick("X (A>B): Failed", false);
-                    // FlxG.watch.addQuick("X (A>B): Worked", true);  
-
-                    // trace('X: Worked - (A>B) | max: ${this.max_overlap} | ${this.overlap}');    
+                    trace('1X: Worked - (A>B) | max: ${this.max_overlap} | ${this.overlap}');    
                     a.touching.none = false;
                     a.touching.front_x = true;
                     a.current_overlap = CollideSide.front_x; 
@@ -310,21 +223,16 @@ class World {
 
                 // trace('0 - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                     
             } else if (a.delta_x < b.delta_x) {
-                //var calc_x = (a.x - b.width_x - b.x);
-                var calc_x = (b.front_x - b.width_x) - a.x;
-                this.overlap = FlxMath.roundDecimal(calc_x, this.decimal);
+                
+                this.overlap = FlxMath.roundDecimal(a.x - b.front_x, this.decimal) + this.overlap_padding;
                 
                 if ((-this.overlap > this.max_overlap) || !a.check_collision.back_x || !b.check_collision.front_x) {      
-                    // trace('X: Failed - (A<B) | max: ${this.max_overlap} | ${-this.overlap}');     
+                    trace('2X: Failed - (A<B) | max: ${this.max_overlap} | ${-this.overlap}');     
                     // FlxG.watch.addQuick("X (A<B): Failed", true);
                     // FlxG.watch.addQuick("X (A<B): Worked", false);                                                          
                     this.overlap = 0;
-                } else {
-                    // FlxG.watch.addQuick("X (A<B): Failed", false);
-                    // FlxG.watch.addQuick("X (A<B): Worked", true);  
-
-
-                    // trace('X: Worked - (A<B) | max: ${this.max_overlap} | ${-this.overlap}');  
+                } else { 
+                    trace('2X: Worked - (A<B) | max: ${this.max_overlap} | ${-this.overlap}');  
                                     
                     a.touching.none = false;
                     a.touching.back_x = true;
@@ -395,14 +303,15 @@ class World {
             } else if (a.delta_y > b.delta_y) {
                 // this.overlap = (a.front_y - b.y) - a.width_y;
                 // this.overlap = FlxMath.roundDecimal((a.front_x - a.width_x) - b.x, this.decimal);
-                this.overlap = FlxMath.roundDecimal((a.y) - (b.y), this.decimal);
+                this.overlap = FlxMath.roundDecimal(a.front_y - b.y, this.decimal) + this.overlap_padding;
                            
                 if ((this.overlap > this.max_overlap) || !a.check_collision.front_y || !b.check_collision.back_y) {
-                    // trace('Y: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                    
+                    trace('AY: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                    
                     // FlxG.watch.addQuick("Y (A>B): Failed", true);
                     // FlxG.watch.addQuick("Y (A>B): Worked", false);                                                          
                     this.overlap = 0;
                 } else {
+                    trace('AY: Worked - (A>B) | max: ${this.max_overlap} | ${this.overlap}');
                     // FlxG.watch.addQuick("Y (A>B): Failed", false);
                     // FlxG.watch.addQuick("Y (A>B): Worked", true);  
 
@@ -417,18 +326,17 @@ class World {
 
                 // trace('0 - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                     
             } else if (a.delta_y < b.delta_y) {
-                // this.overlap = (b.front_y - a.y) - b.width_y;                
-                this.overlap = FlxMath.roundDecimal((b.front_y - b.width_y) - a.y, this.decimal);                
+                // this.overlap = (b.front_y - a.y) - b.width_y;  
+                        
+                this.overlap = FlxMath.roundDecimal(a.y - b.front_y, this.decimal) + this.overlap_padding;                
                 
                 if ((-this.overlap > this.max_overlap) || a.check_collision.back_y == false || b.check_collision.front_y == false) {
-                    // trace('Y: Failed - (A<B) | max: ${this.max_overlap} | ${this.overlap}');                      
-                    // FlxG.watch.addQuick("Y (A<B): Failed", true);
-                    // FlxG.watch.addQuick("Y (A<B): Worked", false);                                                          
+                    trace('BY: Failed - (A<B) | max: ${this.max_overlap} | min: ${this.min_overlap} | ${-this.overlap}');                      
+                                 
                     this.overlap = 0;
                 } else {
-                    // FlxG.watch.addQuick("Y (A<B): Failed", false);
-                    // FlxG.watch.addQuick("Y (A<B): Worked", true);  
-                                                     
+                    trace('BY: Worked - (A<B) | max: ${this.max_overlap} | min: ${this.min_overlap} | ${-this.overlap}');  
+
                     a.touching.none = false;
                     a.touching.front_y = true;
                     a.current_overlap = CollideSide.front_y; 
@@ -437,7 +345,7 @@ class World {
                     b.touching.back_y = true;
                     b.current_overlap = CollideSide.back_y;
                     
-                    // trace('Y: Worked - (A<B) | max: ${this.max_overlap} | ${this.overlap}');                                 
+                                                   
                 }
 
                 // trace('End - (A<B) | max: ${this.max_overlap} | ${this.overlap}');
@@ -471,6 +379,7 @@ class World {
                 a.velocity.y = FlxMath.roundDecimal(this.average + this.new_velocity_a * a.bounce.y, this.decimal);
                 b.velocity.y = FlxMath.roundDecimal(this.average + this.new_velocity_b * b.bounce.y, this.decimal);                
             } else if (!a.immovable) {
+                // trace("Here");
                 a.y = a.y - this.overlap;
                 a.velocity.y = FlxMath.roundDecimal(this.b_overlap_velocity - this.a_overlap_velocity * a.bounce.y, this.decimal);
             } else if (!b.immovable) {
@@ -482,6 +391,10 @@ class World {
         }
 
         return false; 
+    }
+
+    public function output(?a:Dynamic, ?b:Dynamic, ?c:Dynamic, ?d:Dynamic) {
+        trace(a + " " + b + " " + c + " " + d);
     }
 
     public function SeperateZ(a:Body, b:Body, overlap:Bool):Bool {
@@ -499,19 +412,14 @@ class World {
                 b.implanted = true;                
             } else if (a.delta_z > b.delta_z) {
                 // this.overlap = (a.top - b.z) - a.width_y;
-                this.overlap = FlxMath.roundDecimal((a.top - a.height) - (b.z), this.decimal);
+                this.overlap = FlxMath.roundDecimal(a.top - b.z, this.decimal) + this.overlap_padding;
 
                            
                 if ((this.overlap > this.max_overlap) || a.check_collision.top == false || b.check_collision.bottom == false) {
-                    // trace('Z: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                 
-                    // FlxG.watch.addQuick("Z (A>B): Failed", true);
-                    // FlxG.watch.addQuick("Z (A>B): Worked", false);                                                          
+                    trace('Z: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                                                                        
                     this.overlap = 0;
                 } else {
-                    // FlxG.watch.addQuick("Z (A>B): Failed", false);
-                    // FlxG.watch.addQuick("Z (A>B): Worked", true);  
-
-                    // trace('Z: Worked - (A>B) | max: ${this.max_overlap} | ${this.overlap}');
+                    trace('Z: Worked - (A>B) | max: ${this.max_overlap} | ${this.overlap}');
 
                     a.touching.none = false;
                     a.touching.top = true;
@@ -524,20 +432,16 @@ class World {
 
                 // trace('0 - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                     
             } else if (a.delta_z < b.delta_z) {
-                var collide_z = (a.z) - (b.top - b.height);
+                var collide_z = (a.z - b.top);
                 
-                this.overlap = FlxMath.roundDecimal(collide_z, this.decimal);
+                this.overlap = FlxMath.roundDecimal(collide_z, this.decimal) + this.overlap_padding;
                 
                 if (-this.overlap > this.max_overlap  || a.check_collision.bottom == false || b.check_collision.top == false) {
-                    // trace('Z: Failed - (A<B) | max: ${this.max_overlap} | ${this.overlap}');
-                    // FlxG.watch.addQuick("Z (A<B): Failed", true);
-                    // FlxG.watch.addQuick("Z (A<B): Worked", false);                                                          
+                    trace('Z: Failed - (A<B) | max: ${this.max_overlap} | ${this.overlap}');                                                         
                     this.overlap = 0;
                 } else {
-                    // FlxG.watch.addQuick("Z (A<B): Failed", false);
-                    // FlxG.watch.addQuick("Z (A<B): Worked", true);  
 
-                    // trace('Z: Worked - (A<B) | max: ${this.max_overlap} | ${this.overlap}');                                     
+                    trace('Z: Worked - (A<B) | max: ${this.max_overlap} | ${this.overlap}');                                     
 
                     a.touching.none = false;
                     a.touching.bottom = true;

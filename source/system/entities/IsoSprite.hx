@@ -15,6 +15,7 @@ import system.world.World;
 import flixel.addons.effects.chainable.FlxOutlineEffect;
 import flixel.addons.effects.chainable.FlxOutlineEffect.FlxOutlineMode;
 import flixel.util.FlxColor;
+import state.MenuState;
 
 class IsoSprite extends FlxSprite {
     
@@ -26,7 +27,10 @@ class IsoSprite extends FlxSprite {
     public var iso_visited:Int = 0;
     public var iso_depth:Int = 0;
 
-    public var world:World;
+    // public var world:World;
+    public var world:MenuState;
+    
+    
 
     //@optimise iso_sprites_behind no reason to store more sprites
     public var iso_sprites_behind:Array<IsoSprite> = new Array<IsoSprite>();

@@ -13,7 +13,7 @@ class Block extends IsoSprite {
         super(x, y, z, graphic);        
         this.entity = "Block";
         this.active = false;
-        this.iso_bounds.weight = 2;
+        this.iso_bounds.weight = 1;
         this.iso_bounds.immovable = true;
         // this.iso_bounds.moves = true;
         
