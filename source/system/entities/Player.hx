@@ -72,7 +72,7 @@ class Player extends IsoSprite {
         if (FlxG.keys.pressed.X ) {
              this.iso_bounds.velocity.z = -5;
         } else if (FlxG.keys.pressed.Z) {
-             this.iso_bounds.velocity.z = 5;
+             this.iso_bounds.velocity.z = 100;
         } else {
             this.iso_bounds.velocity.z = 0;
         }

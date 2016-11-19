@@ -153,7 +153,9 @@ class World {
         return this.result;
     }
 
-    public var padding:Float= 0.01;
+    public var padding:Float = 0.0;
+    public var overlap_bias:Float = 0.0;
+    public var overlap_padding:Float = 0;
 
     public function intersects(a:Body, b:Body):Bool {
         
@@ -169,7 +171,7 @@ class World {
             return false;
         }
 
-        if (a.y + padding  >= b.front_y - padding ) {
+        if (a.y + padding >= b.front_y - padding ) {
             return false;
         }
 
@@ -188,9 +190,9 @@ class World {
     public var new_velocity_b:Float;
     public var average:Float;
     
-    public var overlap_bias:Float = 0.099;
+
     public var min_overlap:Float;
-    public var overlap_padding:Float = 0.0;
+    
 
     public function SeperateX(a:Body, b:Body, overlap:Bool):Bool {
         if(a.immovable && b.immovable) return false;
@@ -436,7 +438,7 @@ class World {
                 
                 this.overlap = FlxMath.roundDecimal(collide_z, this.decimal) + this.overlap_padding;
                 
-                if (-this.overlap > this.max_overlap  || a.check_collision.bottom == false || b.check_collision.top == false) {
+                if ((-this.overlap > this.max_overlap)  || a.check_collision.bottom == false || b.check_collision.top == false) {
                     trace('Z: Failed - (A<B) | max: ${this.max_overlap} | ${this.overlap}');                                                         
                     this.overlap = 0;
                 } else {

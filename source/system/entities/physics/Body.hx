@@ -74,7 +74,7 @@ class Body {
 
     public var pre_update:Bool = true;
 
-    public var post_update:Bool = true;
+    public var post_update:Bool = false;
 
     public var immovable:Bool = false;
 

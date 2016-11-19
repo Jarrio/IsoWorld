@@ -32,6 +32,9 @@ import openfl.Assets;
 import openfl.display.Bitmap;
 import hxmath.math.Vector3;
 
+import lime.audio.AudioBuffer;
+import lime.audio.AudioSource;
+
 import flixel.ui.FlxBar;
 
 import system.world.World;
@@ -143,9 +146,10 @@ class MenuState extends FlxState {
 			this.depth.update_bounding_cube(group.members[i], this);
 		}
 		
+		this.game.Collide(this.player, this.group.members); 
 		super.update(elapsed);	
 
-		this.game.Collide(this.player, this.group.members);
+
 
 		for (i in 0...group.length) {
 			var a = group.members[i];

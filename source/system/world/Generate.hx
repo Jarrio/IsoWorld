@@ -18,15 +18,17 @@ class Generate {
 
     public function new() {
         terrain = new Noise();
-        terrain.seed = 3;
-        terrain.frequency = 0.4;
-        terrain.lacunarity = 0.96;
+        // terrain.seed = 3;
+        terrain.seed = 50;
+        terrain.frequency = 64;
+        terrain.lacunarity = 0.94;
+        // terrain.octaves = 6;
         terrain.octaves = 6;
-        terrain.persistance = 0.4;
-        terrain.quality = QualityMode.HIGH;
+        terrain.persistance = 0.9;
+        terrain.quality = QualityMode.LOW;
 
         water = new Noise();
-        water.seed = 1;
+        // water.seed = 1;
         water.frequency = 0.1;
         water.lacunarity = 0.8;
         water.octaves = 3;
@@ -44,8 +46,8 @@ class Generate {
      * 12 x 12 x 4
      ******/
     public function Terrain() {
-        var max_x = 5;
-        var max_y = 5;
+        var max_x = 10;
+        var max_y = 10;
         var max_z = 3;
         for (x in 0...max_x) {
             for (y in 0...max_y) {
@@ -88,8 +90,11 @@ class Generate {
     }
 
     public function biome(e:Float, m:Float):Blocks {
+        trace(e);
+        if (e < 0.24) return Blocks.Air;
         if (e < 0.25) return Blocks.Water;
         if (e < 0.28) return Blocks.Sand;
+        
 
         if (e > 0.4) {
             if (m < 0.16) return Blocks.Dark_Grass;
