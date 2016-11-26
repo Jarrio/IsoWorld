@@ -33,7 +33,7 @@ class Generate {
         // water.seed = 1;
         // water.seed = FlxG.random.int(0, 33000);
         water.seed = 6531;
-        water.frequency = 0.3;
+        water.frequency = 0.1;
         water.lacunarity = 0.8;
         water.octaves = 3;
         water.persistance = 0.2;
@@ -89,7 +89,7 @@ class Generate {
                     if (noise_return == Blocks.Dark_Grass) this.block(x, y, z, AssetPaths.new_dark_grass_cube__png);                       
                     if (noise_return == Blocks.Mud) this.block(x, y, z, AssetPaths.new_mud_cube__png);
                     if (noise_return == Blocks.Dead) this.block(x, y, z, AssetPaths.new_dead_cube__png);                        
-                    if (noise_return == Blocks.Snow) this.block(x, y, z, AssetPaths.grey_snow_cube__png);              
+                    // if (noise_return == Blocks.Snow) this.block(x, y, z, AssetPaths.snow_slab__png);              
                 }
             }
         }

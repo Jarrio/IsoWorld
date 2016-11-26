@@ -220,26 +220,26 @@ class MenuState extends FlxState {
 	}	
 
 	public function init() {
-		// #if debug
-		// var commands = new CustomCommands(this);
+		#if debug
+		var commands = new CustomCommands(this);
 
-		// var trackers = new TrackerProfiles();
+		var trackers = new TrackerProfiles();
 
-		// for (i in 0...trackers.profiles.length) {
-		// 	FlxG.debugger.addTrackerProfile(trackers.profiles[i]);
-		// }
+		for (i in 0...trackers.profiles.length) {
+			FlxG.debugger.addTrackerProfile(trackers.profiles[i]);
+		}
 
-		// FlxG.console.autoPause = false;
+		FlxG.console.autoPause = false;
 
-		// FlxG.console.registerFunction("sprite", commands.sprite);
-		// FlxG.console.registerFunction("group", commands.group);
+		FlxG.console.registerFunction("sprite", commands.sprite);
+		FlxG.console.registerFunction("group", commands.group);
 
-		// var window = FlxG.debugger.track(player, "Player sprite");
-		// window.reposition(0, 0);
-		// FlxG.debugger.track(player.iso_bounds, "Player body").reposition(0, window.height);
+		var window = FlxG.debugger.track(player, "Player sprite");
+		window.reposition(0, 0);
+		FlxG.debugger.track(player.iso_bounds, "Player body").reposition(0, window.height);
 		
-		// FlxG.debugger.track(group.members[0], "Block sprite").reposition(window.width, 0);
-		// FlxG.debugger.track(group.members[0].iso_bounds, "Block body").reposition(window.width, window.height);
-		// #end		
+		FlxG.debugger.track(group.members[0], "Block sprite").reposition(window.width, 0);
+		FlxG.debugger.track(group.members[0].iso_bounds, "Block body").reposition(window.width, window.height);
+		#end		
 	}
 }

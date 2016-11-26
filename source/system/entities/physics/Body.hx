@@ -125,15 +125,20 @@ class Body {
         this.center.set(this.x + (this.width_x), this.y + this.width_y, this.z + this.half_height);
 
 
-        
+        this.x_width = this.width_x / x_default;
+        this.y_width = this.width_y / y_default;
+        this.z_width = this.height / z_default;
 
         //this.position.set(sprite.IsoX(), sprite.IsoY(), sprite.IsoZ());
         //this.previous_position.set(this.position.x, this.position.y, this.position.z);
     }
 
-    public var x_width:Float = 1;
-    public var y_width:Float = 1;
-    public var z_width:Float = 1;
+    public var x_default:Float = 32;
+    public var y_default:Float = 32;
+    public var z_default:Float = 32;
+    public var x_width:Float = 0;
+    public var y_width:Float = 0;
+    public var z_width:Float = 0;
 
     public function PreUpdate() {
         if (!this.pre_update) return;
