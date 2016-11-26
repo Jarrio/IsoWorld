@@ -10,7 +10,7 @@ import system.entities.IsoSprite;
 
 class World {
 
-    public var gravity:Vector3 = new Vector3(0, 0, 0);
+    public var gravity:Vector3 = new Vector3(0, 0, -100);
     public var drag:Float = 0;
     public var total:Int;
 
@@ -155,7 +155,7 @@ class World {
 
     public var padding:Float = 0.0;
     public var overlap_bias:Float = 0.0;
-    public var overlap_padding:Float = 0;
+    public var overlap_padding:Float = 0.0;
 
     public function intersects(a:Body, b:Body):Bool {
         
@@ -210,10 +210,10 @@ class World {
 
                 
                 if ((this.overlap > this.max_overlap) || !a.check_collision.front_x || !b.check_collision.back_x) {
-                    trace('1X: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                                                              
+                    // trace('1X: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                                                              
                     this.overlap = 0;
                 } else {
-                    trace('1X: Worked - (A>B) | max: ${this.max_overlap} | ${this.overlap}');    
+                    // trace('1X: Worked - (A>B) | max: ${this.max_overlap} | ${this.overlap}');    
                     a.touching.none = false;
                     a.touching.front_x = true;
                     a.current_overlap = CollideSide.front_x; 
@@ -229,12 +229,12 @@ class World {
                 this.overlap = FlxMath.roundDecimal(a.x - b.front_x, this.decimal) + this.overlap_padding;
                 
                 if ((-this.overlap > this.max_overlap) || !a.check_collision.back_x || !b.check_collision.front_x) {      
-                    trace('2X: Failed - (A<B) | max: ${this.max_overlap} | ${-this.overlap}');     
+                    // trace('2X: Failed - (A<B) | max: ${this.max_overlap} | ${-this.overlap}');     
                     // FlxG.watch.addQuick("X (A<B): Failed", true);
                     // FlxG.watch.addQuick("X (A<B): Worked", false);                                                          
                     this.overlap = 0;
                 } else { 
-                    trace('2X: Worked - (A<B) | max: ${this.max_overlap} | ${-this.overlap}');  
+                    // trace('2X: Worked - (A<B) | max: ${this.max_overlap} | ${-this.overlap}');  
                                     
                     a.touching.none = false;
                     a.touching.back_x = true;
@@ -308,12 +308,12 @@ class World {
                 this.overlap = FlxMath.roundDecimal(a.front_y - b.y, this.decimal) + this.overlap_padding;
                            
                 if ((this.overlap > this.max_overlap) || !a.check_collision.front_y || !b.check_collision.back_y) {
-                    trace('AY: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                    
+                    // trace('AY: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                    
                     // FlxG.watch.addQuick("Y (A>B): Failed", true);
                     // FlxG.watch.addQuick("Y (A>B): Worked", false);                                                          
                     this.overlap = 0;
                 } else {
-                    trace('AY: Worked - (A>B) | max: ${this.max_overlap} | ${this.overlap}');
+                    // trace('AY: Worked - (A>B) | max: ${this.max_overlap} | ${this.overlap}');
                     // FlxG.watch.addQuick("Y (A>B): Failed", false);
                     // FlxG.watch.addQuick("Y (A>B): Worked", true);  
 
@@ -333,11 +333,11 @@ class World {
                 this.overlap = FlxMath.roundDecimal(a.y - b.front_y, this.decimal) + this.overlap_padding;                
                 
                 if ((-this.overlap > this.max_overlap) || a.check_collision.back_y == false || b.check_collision.front_y == false) {
-                    trace('BY: Failed - (A<B) | max: ${this.max_overlap} | min: ${this.min_overlap} | ${-this.overlap}');                      
+                    // trace('BY: Failed - (A<B) | max: ${this.max_overlap} | min: ${this.min_overlap} | ${-this.overlap}');                      
                                  
                     this.overlap = 0;
                 } else {
-                    trace('BY: Worked - (A<B) | max: ${this.max_overlap} | min: ${this.min_overlap} | ${-this.overlap}');  
+                    // trace('BY: Worked - (A<B) | max: ${this.max_overlap} | min: ${this.min_overlap} | ${-this.overlap}');  
 
                     a.touching.none = false;
                     a.touching.front_y = true;
@@ -418,10 +418,10 @@ class World {
 
                            
                 if ((this.overlap > this.max_overlap) || a.check_collision.top == false || b.check_collision.bottom == false) {
-                    trace('Z: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                                                                        
+                    // trace('Z: Failed - (A>B) | max: ${this.max_overlap} | ${this.overlap}');                                                                        
                     this.overlap = 0;
                 } else {
-                    trace('Z: Worked - (A>B) | max: ${this.max_overlap} | ${this.overlap}');
+                    // trace('Z: Worked - (A>B) | max: ${this.max_overlap} | ${this.overlap}');
 
                     a.touching.none = false;
                     a.touching.top = true;
@@ -439,11 +439,11 @@ class World {
                 this.overlap = FlxMath.roundDecimal(collide_z, this.decimal) + this.overlap_padding;
                 
                 if ((-this.overlap > this.max_overlap)  || a.check_collision.bottom == false || b.check_collision.top == false) {
-                    trace('Z: Failed - (A<B) | max: ${this.max_overlap} | ${this.overlap}');                                                         
+                    // trace('Z: Failed - (A<B) | max: ${this.max_overlap} | ${this.overlap}');                                                         
                     this.overlap = 0;
                 } else {
 
-                    trace('Z: Worked - (A<B) | max: ${this.max_overlap} | ${this.overlap}');                                     
+                    // trace('Z: Worked - (A<B) | max: ${this.max_overlap} | ${this.overlap}');                                     
 
                     a.touching.none = false;
                     a.touching.bottom = true;

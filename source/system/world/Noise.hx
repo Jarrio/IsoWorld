@@ -13,12 +13,12 @@ class Noise {
 
     public var noise:Perlin;
 
-    public function new() {
-        noise = new Perlin(frequency, lacunarity, persistance, octaves, seed, quality);
-        
-
-    }
+    public function new() {}
     
+    public function generate() {
+        noise = new Perlin(frequency, lacunarity, persistance, octaves, seed, quality);
+    }
+
     public function value(nx:Float, ny:Float, nz:Float):Float {
         return noise.getValue(nx, ny, nz) / 2.0 + 0.5;        
     }

@@ -11,9 +11,7 @@ class TestState extends FlxState {
     public var test:FlxSprite;
     override public function create():Void {
         super.create();
-        
-        test = new state.Test(100, 100);
-        test.loadGraphic(AssetPaths.Mouths__png, true, 24, 12);
+
         // test.animation.add("happy", [0], 1);
         // test.animation.add("sad", [1], 1);
         // test.animation.add("shock", [2], 1);

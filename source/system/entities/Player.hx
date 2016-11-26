@@ -5,6 +5,7 @@ import system.entities.IsoSprite;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import system.constants.Physics;
+import flixel.tweens.FlxTween;
 
 class Player extends IsoSprite {
     public var colliding:Bool = false;
@@ -22,7 +23,7 @@ class Player extends IsoSprite {
         this.iso_bounds.immovable = false;
         this.iso_bounds.post_update = true;
         this.iso_bounds.allow_gravity = true;
-        this.iso_bounds.gravity.z = -50;      
+        this.iso_bounds.gravity.z = -150;      
     }
     
 
@@ -69,19 +70,19 @@ class Player extends IsoSprite {
             this.iso_bounds.velocity.x = 0;
         }
         
-        if (FlxG.keys.pressed.X ) {
-             this.iso_bounds.velocity.z = -5;
-        } else if (FlxG.keys.pressed.Z) {
-             this.iso_bounds.velocity.z = 100;
+        if (FlxG.keys.pressed.X) {
+             this.iso_bounds.velocity.z = 70;
+        } else if (FlxG.keys.pressed.SPACE && this.iso_bounds.touching.bottom && !this.Movekey) {
+            this.iso_bounds.velocity.z = 80;
+            this.Movekey = true;
         } else {
-            this.iso_bounds.velocity.z = 0;
+            this.iso_bounds.velocity.z = 0;            
+        }
+
+        if (FlxG.keys.justReleased.SPACE) {
+            this.Movekey = false;
         }
 
         #end
-
-        if (Movekey) {  
-            Movekey = false;
-            //this.ResetBounds();         
-        }          
     }
 }

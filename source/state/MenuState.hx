@@ -1,39 +1,25 @@
 
 package state;
 
-import haxe.ds.Vector;
-import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.text.FlxText;
-import flixel.ui.FlxButton;
-import flixel.FlxCamera;
-import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 
 import flixel.util.FlxSort;
-import haxe.ds.ArraySort;
-import flixel.system.FlxAssets;
 import system.entities.IsoSprite;
 import system.world.Depth;
 import flixel.FlxCamera;
-import flixel.system.debug.watch.Tracker;
 import flixel.util.FlxColor;
 
 import system.world.Generate;
 import system.entities.Player;
 import system.debug.TrackerProfiles;
 import system.debug.CustomCommands;
-import state.Test;
 import system.entities.Block;
 
-import openfl.Assets;
-import openfl.display.Bitmap;
-import hxmath.math.Vector3;
-
-import lime.audio.AudioBuffer;
-import lime.audio.AudioSource;
+import system.utility.ThreadPool;
 
 import flixel.ui.FlxBar;
 
@@ -44,7 +30,6 @@ class MenuState extends FlxState {
 	public var generate:Generate;
 
 	public var group:FlxTypedSpriteGroup<IsoSprite> = new FlxTypedSpriteGroup<IsoSprite>();
-	public var debug:FlxSpriteGroup = new FlxSpriteGroup();
 	public var text:FlxText;
 	
 	public var game:World;
@@ -55,9 +40,12 @@ class MenuState extends FlxState {
 	public var width_int:Int = 100;
 
 	public var test:Null<Int> = null;
+
+	public var thread_pool:ThreadPool;
 	
 	override public function create():Void {		
 		super.create();		
+		this.thread_pool = new ThreadPool(8);
 		game = new World();
 		#if next
 		FlxG.stage.window.x = 320 + 960;
@@ -68,8 +56,6 @@ class MenuState extends FlxState {
 		
 		//FlxG.sound.play("Test");
 		#end
-		// FlxG.log.redirectTraces = true;
- 
 
 		this.bgColor = FlxColor.WHITE;
 
@@ -78,12 +64,10 @@ class MenuState extends FlxState {
 		generate = new Generate();
 		generate.Terrain();
 		
-		
 
+		player = new Player(0, 0, 12, null, this);
 
-		player = new Player(0, 0, 4, null, this);
-
-		this.camera.follow(player);
+		this.camera.follow(player, FlxCameraFollowStyle.TOPDOWN);
 
 		for (i in 0...generate.members.length) {
 			var member = generate.members[i];
@@ -99,9 +83,6 @@ class MenuState extends FlxState {
 		var custom_4 = new Block(0, -5, 0);
 		var custom_5 = new Block(0, 0, -2);
 		
-
-		
-
 		custom_1.world = this;
 		custom_2.world = this;
 		custom_3.world = this;
@@ -122,12 +103,11 @@ class MenuState extends FlxState {
 
 		camera.zoom = 1;
 
-		add(debug);
-
 
 
 		this.init();
-
+		
+		
 		
 //		FlxG.cameras.add()
 	}
@@ -137,6 +117,49 @@ class MenuState extends FlxState {
 	public var debug_length:Int = 0;
 	public var show_debug:Bool = false;
 
+	public var update_phase:Bool = false;
+	public var running:Bool = false;
+
+	public function thread_back(x:Dynamic):Dynamic {
+		if (this.update_phase) {
+			this.running = true;
+			this.thread_pool.addTask(sort_members(x), null, this.thread_back(x));
+			
+		}
+		return null;
+	}
+
+	public function sort_members(x:Dynamic):Dynamic {
+		if (this.update_phase) {		
+			for (i in 0...group.length) {
+				var a = group.members[i];
+				index_behind = 0;
+				
+				for (j in 0...group.length) {
+					if (i != j) {
+						var b = group.members[j];
+						if(depth.find_overlaps(a.iso_bounds.a_comparison, b.iso_bounds.b_comparison)) {
+							a.iso_sprites_behind[index_behind++] = b;						
+						}
+					}
+				}
+				a.iso_visited = 0;
+			}
+			
+			depth.sort_depth = 0;
+			for (i in 0...group.length) {
+				depth.visit_node(group.members[i]);
+			}
+			
+			group.sort(SortBy3d, FlxSort.DESCENDING);
+			this.update_phase = false;
+			this.running = false;
+		}
+		return null;
+	}
+	public var first_run:Bool = true;
+
+	
 	override public function update(elapsed:Float):Void	{	
 		for (i in 0...group.length) {
 			this.group.members[i].iso_bounds.PreUpdate(); 
@@ -149,27 +172,16 @@ class MenuState extends FlxState {
 		this.game.Collide(this.player, this.group.members); 
 		super.update(elapsed);	
 
+		this.update_phase = true;
 
-
-		for (i in 0...group.length) {
-			var a = group.members[i];
-			index_behind = 0;
-			
-			for (j in 0...group.length) {
-				if (i != j) {
-					var b = group.members[j];
-					if(depth.find_overlaps(a.iso_bounds.a_comparison, b.iso_bounds.b_comparison)) {
-						a.iso_sprites_behind[index_behind++] = b;						
-					}
-				}
-			}
-			a.iso_visited = 0;
+		if (this.first_run) {
+			this.thread_pool.addTask(sort_members(x), null, this.thread_back(x));
+			this.first_run = false;
 		}
 		
-		depth.sort_depth = 0;
-		for (i in 0...group.length) {
-			depth.visit_node(group.members[i]);
-		}
+
+		// this.sort_members();
+		
 
 		
 		// FlxG.watch.addQuick("show debug", show_debug);
@@ -180,19 +192,19 @@ class MenuState extends FlxState {
 			FlxG.camera.zoom += 0.1;
 		}
 
-		group.sort(SortBy3d, FlxSort.DESCENDING);
+		
 		
 		for (i in 0...group.length) {
 			this.group.members[i].iso_bounds.PostUpdate(); 
 		}
 		
-	
-
-		FlxG.watch.addQuick("Total", this.game.total);		
-		FlxG.watch.addQuick("Result", this.game.result);		
 		//FlxG.watch.addQuick("Intersects", this.game.intersects(player.iso_bounds, group.members[0].iso_bounds));
 		// FlxG.watch.addQuick("overlap", this.world.overlap);
 		// FlxG.watch.addQuick("max overlap", this.world.max_overlap);
+
+		if (!this.running) {
+			this.thread_back(null);
+		}
 	}
 
 
@@ -208,26 +220,26 @@ class MenuState extends FlxState {
 	}	
 
 	public function init() {
-		#if debug
-		var commands = new CustomCommands(this);
+		// #if debug
+		// var commands = new CustomCommands(this);
 
-		var trackers = new TrackerProfiles();
+		// var trackers = new TrackerProfiles();
 
-		for (i in 0...trackers.profiles.length) {
-			FlxG.debugger.addTrackerProfile(trackers.profiles[i]);
-		}
+		// for (i in 0...trackers.profiles.length) {
+		// 	FlxG.debugger.addTrackerProfile(trackers.profiles[i]);
+		// }
 
-		FlxG.console.autoPause = false;
+		// FlxG.console.autoPause = false;
 
-		FlxG.console.registerFunction("sprite", commands.sprite);
-		FlxG.console.registerFunction("group", commands.group);
+		// FlxG.console.registerFunction("sprite", commands.sprite);
+		// FlxG.console.registerFunction("group", commands.group);
 
-		var window = FlxG.debugger.track(player, "Player sprite");
-		window.reposition(0, 0);
-		FlxG.debugger.track(player.iso_bounds, "Player body").reposition(0, window.height);
+		// var window = FlxG.debugger.track(player, "Player sprite");
+		// window.reposition(0, 0);
+		// FlxG.debugger.track(player.iso_bounds, "Player body").reposition(0, window.height);
 		
-		FlxG.debugger.track(group.members[0], "Block sprite").reposition(window.width, 0);
-		FlxG.debugger.track(group.members[0].iso_bounds, "Block body").reposition(window.width, window.height);
-		#end		
+		// FlxG.debugger.track(group.members[0], "Block sprite").reposition(window.width, 0);
+		// FlxG.debugger.track(group.members[0].iso_bounds, "Block body").reposition(window.width, window.height);
+		// #end		
 	}
 }

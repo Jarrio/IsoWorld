@@ -9,7 +9,7 @@ import flixel.FlxG;
 class Depth {
     public var sort_depth:Int = 0;    
     public var behind_index:Int = 0;
-    public var padding:Float = 0.02;
+    public var padding:Float = 0.08;
     public var objects_length:Int = 0;
 
     public function new() {

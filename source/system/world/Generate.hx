@@ -19,21 +19,27 @@ class Generate {
     public function new() {
         terrain = new Noise();
         // terrain.seed = 3;
-        terrain.seed = 50;
-        terrain.frequency = 64;
-        terrain.lacunarity = 0.94;
-        // terrain.octaves = 6;
-        terrain.octaves = 6;
+        // terrain.seed = FlxG.random.int(0, 33000);
+        terrain.seed = 31309;
+        terrain.frequency = 0.4;
+        terrain.lacunarity = 0.96;
+        terrain.octaves = 10;
         terrain.persistance = 0.9;
-        terrain.quality = QualityMode.LOW;
+        terrain.quality = QualityMode.HIGH;
+
+        terrain.generate();
 
         water = new Noise();
         // water.seed = 1;
-        water.frequency = 0.1;
+        // water.seed = FlxG.random.int(0, 33000);
+        water.seed = 6531;
+        water.frequency = 0.3;
         water.lacunarity = 0.8;
         water.octaves = 3;
         water.persistance = 0.2;
-        water.quality = QualityMode.HIGH;
+        water.quality = QualityMode.LOW;
+        
+        water.generate();
     }
 
     /*****
@@ -46,9 +52,9 @@ class Generate {
      * 12 x 12 x 4
      ******/
     public function Terrain() {
-        var max_x = 10;
-        var max_y = 10;
-        var max_z = 3;
+        var max_x = 12;
+        var max_y = 12;
+        var max_z = 4;
         for (x in 0...max_x) {
             for (y in 0...max_y) {
                 for (z in 0...max_z) {
@@ -77,12 +83,12 @@ class Generate {
                     m /= (0.00+0.34+0.80+0.82+0.53+0.89);
 
                     var noise_return = this.biome(e, m);
-                    if (noise_return == Blocks.Water) this.block(x, y, z, AssetPaths.water_cube__png);
-                    if (noise_return == Blocks.Grass) this.block(x, y, z, AssetPaths.green_cube_v2__png);
-                    if (noise_return == Blocks.Sand) this.block(x, y, z, AssetPaths.sand_cube__png);                        
-                    if (noise_return == Blocks.Dark_Grass) this.block(x, y, z, AssetPaths.darker_grass_cube__png);                       
-                    if (noise_return == Blocks.Mud) this.block(x, y, z, AssetPaths.mud_cube__png);
-                    if (noise_return == Blocks.Dead) this.block(x, y, z, AssetPaths.dead_cube__png);                        
+                    if (noise_return == Blocks.Water) this.block(x, y, z, AssetPaths.new_water_cube__png);
+                    if (noise_return == Blocks.Grass) this.block(x, y, z, AssetPaths.new_light_grass__png);
+                    if (noise_return == Blocks.Sand) this.block(x, y, z, AssetPaths.new_sand_cube__png);                        
+                    if (noise_return == Blocks.Dark_Grass) this.block(x, y, z, AssetPaths.new_dark_grass_cube__png);                       
+                    if (noise_return == Blocks.Mud) this.block(x, y, z, AssetPaths.new_mud_cube__png);
+                    if (noise_return == Blocks.Dead) this.block(x, y, z, AssetPaths.new_dead_cube__png);                        
                     if (noise_return == Blocks.Snow) this.block(x, y, z, AssetPaths.grey_snow_cube__png);              
                 }
             }
@@ -90,7 +96,6 @@ class Generate {
     }
 
     public function biome(e:Float, m:Float):Blocks {
-        trace(e);
         if (e < 0.24) return Blocks.Air;
         if (e < 0.25) return Blocks.Water;
         if (e < 0.28) return Blocks.Sand;
@@ -100,7 +105,7 @@ class Generate {
             if (m < 0.16) return Blocks.Dark_Grass;
             if (m < 0.30) return Blocks.Mud;
             if (m < 0.50) return Blocks.Dead;            
-            return Blocks.Snow;
+            return Blocks.Air;
         }
 
         if (e > 0.3) {
