@@ -20,7 +20,7 @@ class Generate {
         terrain = new Noise();
         // terrain.seed = 3;
         // terrain.seed = FlxG.random.int(0, 33000);
-        terrain.seed = 31309;
+        terrain.seed = 0;
         terrain.frequency = 0.4;
         terrain.lacunarity = 0.96;
         terrain.octaves = 10;
@@ -32,7 +32,7 @@ class Generate {
         water = new Noise();
         // water.seed = 1;
         // water.seed = FlxG.random.int(0, 33000);
-        water.seed = 6531;
+        water.seed = 0;
         water.frequency = 0.1;
         water.lacunarity = 0.8;
         water.octaves = 3;

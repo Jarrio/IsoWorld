@@ -10,8 +10,12 @@
 -D hscript=2.0.7
 -cp P:/Development/HaxeToolkit/haxe/lib/flixel-addons/2,2,0
 -D flixel-addons=2.2.0
+-cp P:/Development/HaxeToolkit/haxe/lib/flixel-ui/2,2,0
+-D flixel-ui=2.2.0
 -cp P:/Development/HaxeToolkit/haxe/lib/hxmath/0,15,0
 -D hxmath=0.15.0
+-cp P:/Development/HaxeToolkit/haxe/lib/libnoise/1,0,0/Sources
+-D libnoise=1.0.0
 -cp source
 -cp P:\Development\HaxeToolkit\haxe\lib\openfl/3,6,1/extern
 -D HXCPP_QUIET

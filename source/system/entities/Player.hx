@@ -22,7 +22,16 @@ class Player extends IsoSprite {
         this.iso_bounds.moves = true; 
         this.iso_bounds.immovable = false;
         this.iso_bounds.post_update = true;
-        this.iso_bounds.allow_gravity = true;
+        this.iso_bounds.check_collision.none = true;
+        this.iso_bounds.check_collision.back_x = false;
+        this.iso_bounds.check_collision.front_x = false;
+        this.iso_bounds.check_collision.back_y = false;
+        this.iso_bounds.check_collision.front_y = false;
+        this.iso_bounds.check_collision.top = false;
+        this.iso_bounds.check_collision.bottom = false;
+        this.iso_bounds.check_collision.any = false;
+        
+        // this.iso_bounds.allow_gravity = true;
         this.iso_bounds.gravity.z = -150;      
     }
     
@@ -71,7 +80,9 @@ class Player extends IsoSprite {
         }
         
         if (FlxG.keys.pressed.X) {
-             this.iso_bounds.velocity.z = 70;
+             this.iso_bounds.velocity.z = speed;
+        } else if (FlxG.keys.pressed.Z) {
+            this.iso_bounds.velocity.z = -speed;
         } else if (FlxG.keys.pressed.SPACE && this.iso_bounds.touching.bottom && !this.Movekey) {
             this.iso_bounds.velocity.z = 80;
             this.Movekey = true;

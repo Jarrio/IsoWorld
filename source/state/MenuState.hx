@@ -20,8 +20,10 @@ import system.debug.CustomCommands;
 import system.entities.Block;
 
 import system.utility.ThreadPool;
+import flixel.ui.FlxButton;
 
-import flixel.ui.FlxBar;
+import flixel.addons.text.FlxTextField;
+import flixel.addons.ui.FlxInputText;
 
 import system.world.World;
 
@@ -35,14 +37,26 @@ class MenuState extends FlxState {
 	public var game:World;
 
 	public var player:Player;
-
-	public var bar:FlxBar;
 	public var width_int:Int = 100;
 
 	public var test:Null<Int> = null;
 
 	public var thread_pool:ThreadPool;
-	
+
+	public var label_x:FlxTextField;
+	public var label_y:FlxTextField;
+	public var label_z:FlxTextField;
+
+	public var text_x:FlxInputText;
+	public var text_y:FlxInputText;
+	public var text_z:FlxInputText;
+
+	public var blocks_x:Int = 2;
+	public var blocks_y:Int = 2;
+	public var blocks_z:Int = 2;
+
+	public var blocks_btn:FlxButton;
+
 	override public function create():Void {		
 		super.create();		
 		this.thread_pool = new ThreadPool(8);
@@ -65,51 +79,88 @@ class MenuState extends FlxState {
 		generate.Terrain();
 		
 
-		player = new Player(0, 0, 12, null, this);
+		player = new Player(0, 0, -1, null, this);
+		
+		label_x = new FlxTextField(0, 0, 32, "x: ", 26);		
+		label_x.color = FlxColor.BLACK;
 
-		this.camera.follow(player, FlxCameraFollowStyle.TOPDOWN);
+		label_y = new FlxTextField(0, 0, 32, "y: ", 26);
+		label_y.color = FlxColor.BLACK;
 
-		for (i in 0...generate.members.length) {
-			var member = generate.members[i];
-			member.ID = i;
-			member.world = this;
+		label_z = new FlxTextField(0, 0, 32, "z: ", 26);
+		label_z.color = FlxColor.BLACK;
 
-			group.add(member);
+		text_x = new FlxInputText(0, 0, 100, Std.string(this.blocks_x), 26, FlxColor.BLACK, FlxColor.TRANSPARENT);
+		text_y = new FlxInputText(0, 0, 100, Std.string(this.blocks_y), 26, FlxColor.BLACK, FlxColor.TRANSPARENT);
+		text_z = new FlxInputText(0, 0, 100, Std.string(this.blocks_z), 26, FlxColor.BLACK, FlxColor.TRANSPARENT);
+		
+		blocks_btn = new FlxButton(0, 0, "Reset", this.reset_blocks);
+
+		// player.visible = false;
+// 
+
+		this.camera.follow(player, FlxCameraFollowStyle.LOCKON);		
+
+		// for (i in 0...generate.members.length) {
+		// 	var member = generate.members[i];
+		// 	member.ID = i;
+		// 	member.world = this;
+
+		// 	group.add(member);
+		// }
+
+		for (y in 0...this.blocks_y) {
+			for (x in 0...this.blocks_x) {
+				for (z in 0...blocks_z) {
+					var member = new Block(x, y,z, AssetPaths.new_water_cube__png);
+					member.world = this;
+					group.add(member);
+				}
+			}
 		}
 
-		var custom_1 = new Block(5, 0, 0);
-		var custom_2 = new Block(-5, 0, 0);
-		var custom_3 = new Block(0, 5, 0);
-		var custom_4 = new Block(0, -5, 0);
-		var custom_5 = new Block(0, 0, -2);
-		
-		custom_1.world = this;
-		custom_2.world = this;
-		custom_3.world = this;
-		custom_4.world = this;
-		custom_5.world = this;
-
-		// group.add(custom_1);
-		// group.add(custom_2);
-		// group.add(custom_3);
-		// group.add(custom_4);
-		// group.add(custom_5);
+		player.visible = false;
 
 		group.add(player);
 		add(group);		
 
+		add(label_x);
+		add(label_y);
+		add(label_z);
 
+		add(text_x);
+		add(text_y);
+		add(text_z);
 
-
+		add(blocks_btn);
 		camera.zoom = 1;
 
-
-
 		this.init();
-		
-		
-		
 //		FlxG.cameras.add()
+	}
+
+	public function reset_blocks() {
+		this.blocks_x = Std.parseInt(this.text_x.text);
+		this.blocks_y = Std.parseInt(this.text_y.text);
+		this.blocks_z = Std.parseInt(this.text_z.text);
+
+		this.group.destroy();
+		group = new FlxTypedSpriteGroup<IsoSprite>();
+		for (y in 0...this.blocks_y) {
+			for (x in 0...this.blocks_x) {
+				for (z in 0...blocks_z) {
+					var member = new Block(x, y, z, AssetPaths.new_water_cube__png);
+					member.world = this;
+					group.add(member);
+				}
+			}
+		}
+		player = new Player(0, 0, -1, null, this);
+		player.visible = false;
+		group.add(player);
+		add(group);
+
+		this.camera.follow(player, FlxCameraFollowStyle.LOCKON);		
 	}
 
 	public var index_behind:Int = 0;
@@ -159,7 +210,10 @@ class MenuState extends FlxState {
 	}
 	public var first_run:Bool = true;
 
-	
+	public var speed:Float = 30;
+
+	public var tab_index:Int = -1;
+	public var tab_active:Bool = false;
 	override public function update(elapsed:Float):Void	{	
 		for (i in 0...group.length) {
 			this.group.members[i].iso_bounds.PreUpdate(); 
@@ -172,6 +226,27 @@ class MenuState extends FlxState {
 		this.game.Collide(this.player, this.group.members); 
 		super.update(elapsed);	
 
+		label_x.y = (this.player.y - 290);
+		label_x.x = (this.player.x - 600);
+
+		label_y.y = (this.player.y - 260);
+		label_y.x = (this.player.x - 600);
+
+		label_z.y = (this.player.y - 230);
+		label_z.x = (this.player.x - 600);
+
+		text_x.y = (this.player.y - 290);
+		text_x.x = (this.player.x - 600) + 40;
+
+		text_y.y = (this.player.y - 260);
+		text_y.x = (this.player.x - 600) + 40;
+
+		text_z.y = (this.player.y - 230);
+		text_z.x = (this.player.x - 600) + 40;		
+		
+		blocks_btn.y = 120;
+		blocks_btn.x = 16;
+
 		this.update_phase = true;
 
 		if (this.first_run) {
@@ -182,7 +257,42 @@ class MenuState extends FlxState {
 
 		// this.sort_members();
 		
+		if (FlxG.keys.justPressed.TAB) {
+			if (this.tab_index > -1 && this.tab_index < 2) {
+				this.tab_index++;
+			} else {
+				this.tab_index = 0;
+			}
+		}
 
+		switch(tab_index) {
+			case -1:
+				this.text_x.hasFocus = false;
+				this.text_y.hasFocus = false;
+				this.text_z.hasFocus = false;
+			case 0: 
+				this.text_x.hasFocus = true;
+				this.text_y.hasFocus = false;
+				this.text_z.hasFocus = false;
+			case 1: 
+				this.text_x.hasFocus = false;
+				this.text_y.hasFocus = true;
+				this.text_z.hasFocus = false;
+
+			case 2: 
+				this.text_x.hasFocus = false;
+				this.text_y.hasFocus = false;
+				this.text_z.hasFocus = true;
+								
+				
+		}
+
+		if (FlxG.keys.justPressed.ENTER) {
+			if (this.text_x.hasFocus || this.text_y.hasFocus || this.text_z.hasFocus) {
+				this.reset_blocks();
+				this.tab_index = -1;		
+			}
+		}
 		
 		// FlxG.watch.addQuick("show debug", show_debug);
 
@@ -220,26 +330,26 @@ class MenuState extends FlxState {
 	}	
 
 	public function init() {
-		#if debug
-		var commands = new CustomCommands(this);
+		// #if debug
+		// var commands = new CustomCommands(this);
 
-		var trackers = new TrackerProfiles();
+		// var trackers = new TrackerProfiles();
 
-		for (i in 0...trackers.profiles.length) {
-			FlxG.debugger.addTrackerProfile(trackers.profiles[i]);
-		}
+		// for (i in 0...trackers.profiles.length) {
+		// 	FlxG.debugger.addTrackerProfile(trackers.profiles[i]);
+		// }
 
-		FlxG.console.autoPause = false;
+		// FlxG.console.autoPause = false;
 
-		FlxG.console.registerFunction("sprite", commands.sprite);
-		FlxG.console.registerFunction("group", commands.group);
+		// FlxG.console.registerFunction("sprite", commands.sprite);
+		// FlxG.console.registerFunction("group", commands.group);
 
-		var window = FlxG.debugger.track(player, "Player sprite");
-		window.reposition(0, 0);
-		FlxG.debugger.track(player.iso_bounds, "Player body").reposition(0, window.height);
+		// var window = FlxG.debugger.track(player, "Player sprite");
+		// window.reposition(0, 0);
+		// FlxG.debugger.track(player.iso_bounds, "Player body").reposition(0, window.height);
 		
-		FlxG.debugger.track(group.members[0], "Block sprite").reposition(window.width, 0);
-		FlxG.debugger.track(group.members[0].iso_bounds, "Block body").reposition(window.width, window.height);
-		#end		
+		// FlxG.debugger.track(group.members[0], "Block sprite").reposition(window.width, 0);
+		// FlxG.debugger.track(group.members[0].iso_bounds, "Block body").reposition(window.width, window.height);
+		// #end		
 	}
 }
