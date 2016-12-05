@@ -6,6 +6,7 @@ import hxmath.math.Vector3;
 import system.entities.IsoSprite; 
 import flixel.FlxG;
 
+
 class Depth {
     public var sort_depth:Int = 0;    
     public var behind_index:Int = 0;
@@ -16,7 +17,7 @@ class Depth {
         
     }
 
-    public function update_bounding_cube(sprite:IsoSprite, ?state:MenuState) {
+    public function update_bounding_cube(sprite:IsoSprite) {
         sprite.x = ((sprite.iso_x - sprite.iso_y) * sprite.iso_bounds.width_x);
         sprite.y = ((sprite.iso_x + sprite.iso_y - (sprite.iso_z * 2)) * (sprite.iso_bounds.half_width_y));
         sprite.z = (sprite.iso_z * 2) * (sprite.iso_bounds.half_height);

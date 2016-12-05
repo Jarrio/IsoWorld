@@ -18,7 +18,8 @@ import flixel.util.FlxColor;
 import state.MenuState;
 
 class IsoSprite extends FlxSprite {
-    
+    public var air:Bool = false;
+    public var chunk_id:Int = 0;
     public var iso_position:Vector3 = new Vector3(0, 0, 0);
     public var iso_bounds:Body;
     public var cube:Cube;

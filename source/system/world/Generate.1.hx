@@ -62,13 +62,6 @@ class Generate {
      *
      * 12 x 12 x 4
      ******/
-
-
-     
-    public function create_chunks() {
-
-    }
-
     public function Terrain() {
         for (x in 0...max_x) {
             for (y in 0...max_y) {

@@ -77,6 +77,7 @@ class MenuState extends FlxState {
 		depth = new Depth();
 		generate = new Generate();
 		generate.Terrain();
+		generate.chunk();
 		
 
 		player = new Player(0, 0, -1, null, this);
@@ -109,17 +110,23 @@ class MenuState extends FlxState {
 		// 	group.add(member);
 		// }
 
-		for (y in 0...this.blocks_y) {
-			for (x in 0...this.blocks_x) {
-				for (z in 0...blocks_z) {
-					var member = new Block(x, y,z, AssetPaths.new_water_cube__png);
-					member.world = this;
-					group.add(member);
-				}
+		for (i in 0...generate.chunks_array.length) {
+			for (y in 0...generate.chunks_array[i].blocks.length) {
+				var block = generate.chunks_array[i].blocks[y];
+				block.world = this;
+				group.add(block);
 			}
 		}
 
-		player.visible = false;
+		// for (y in 0...this.blocks_y) {
+		// 	for (x in 0...this.blocks_x) {
+		// 		for (z in 0...blocks_z) {
+		// 			var member = new Block(x, y,z, AssetPaths.new_water_cube__png);
+		// 			member.world = this;
+		// 			group.add(member);
+		// 		}
+		// 	}
+		// }
 
 		group.add(player);
 		add(group);		
@@ -135,6 +142,7 @@ class MenuState extends FlxState {
 		add(blocks_btn);
 		camera.zoom = 1;
 
+		
 		this.init();
 //		FlxG.cameras.add()
 	}
@@ -220,7 +228,7 @@ class MenuState extends FlxState {
 		}
 
 		for (i in 0...group.length) {
-			this.depth.update_bounding_cube(group.members[i], this);
+			this.depth.update_bounding_cube(group.members[i]);
 		}
 		
 		this.game.Collide(this.player, this.group.members); 
@@ -264,7 +272,7 @@ class MenuState extends FlxState {
 				this.tab_index = 0;
 			}
 		}
-
+		
 		switch(tab_index) {
 			case -1:
 				this.text_x.hasFocus = false;
@@ -311,7 +319,7 @@ class MenuState extends FlxState {
 		//FlxG.watch.addQuick("Intersects", this.game.intersects(player.iso_bounds, group.members[0].iso_bounds));
 		// FlxG.watch.addQuick("overlap", this.world.overlap);
 		// FlxG.watch.addQuick("max overlap", this.world.max_overlap);
-
+		FlxG.watch.addQuick("Player Chunk:", 'x: ${Math.fceil(player.iso_x / 3)} y: ${Math.fceil(player.iso_y / 3)}');
 		if (!this.running) {
 			this.thread_back(null);
 		}

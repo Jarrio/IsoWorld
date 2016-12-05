@@ -5,12 +5,14 @@ import system.entities.IsoSprite;
 import flixel.FlxG;
 import flixel.util.FlxColor;
 
-class Block extends IsoSprite {
-    public function new(x:Float, y:Float, z:Float, ?graphic:String) {
+class Block extends IsoSprite {    
+    
+    public function new(x:Float, y:Float, z:Float, ?graphic:String, air:Bool = false) {
         if (graphic == null) {
             graphic = AssetPaths.green_cube_v2__png;
         }
-        super(x, y, z, graphic);        
+        super(x, y, z, graphic);
+        this.air = air;        
         this.entity = "Block";
         this.active = false;
         this.iso_bounds.weight = 1;
