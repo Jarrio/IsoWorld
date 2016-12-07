@@ -18,6 +18,6 @@ class Main extends Sprite {
 		// 	new debugger.HaxeRemote(false, "localhost");
 		// #end
 
-		addChild(new FlxGame(1280, 720, ChunkState, 1, 60, 60, true));
+		addChild(new FlxGame(1280, 720, MenuState, 1, 60, 60, true));
 	}
 }

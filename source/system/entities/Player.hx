@@ -9,6 +9,10 @@ import flixel.tweens.FlxTween;
 
 class Player extends IsoSprite {
     public var colliding:Bool = false;
+    
+    public var chunk_x:Int = 0;
+    public var chunk_y:Int = 0;
+    
     public function new(x:Float, y:Float, z:Float, ?graphic:String, ?world) {
         if (graphic == null) {
             graphic = AssetPaths.water_cube__png;            

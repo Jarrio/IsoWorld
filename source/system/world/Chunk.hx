@@ -1,35 +1,24 @@
 package system.world;
 
+import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import system.entities.IsoSprite;
+using flixel.util.FlxArrayUtil;
 
-class Chunk extends IsoSprite {
+class Chunk extends FlxTypedSpriteGroup<IsoSprite> {
 
-    public var id:Int = 0;
-    public var blocks:Array<IsoSprite> = new Array<IsoSprite>();
+    public var processed:Bool = false;
     
-    public var min_x:Int = 9999999;
-    public var min_y:Int = 9999999;
-    
-    public var max_x:Int = -9999999;
-    public var max_y:Int = -9999999;
+    public var chunk_x:Int = 0;
+    public var chunk_y:Int = 0;
 
-    public function new(id:Int) {
-        super(null, null, null, null, null);
-        this.chunk_id = id;
+    public function new(x:Int, y:Int) {
+        super();
+        this.chunk_x = x;
+        this.chunk_y = y;
     }
 
-    public function add_block(block:IsoSprite) {    
-        this.blocks.push(block);
+    public function add_block(block:IsoSprite) {
+        if (!block.air)             
+            this.add(block);
     }
-
-    public function categorise() {
-        for (i in 0...blocks.length) {
-            var block = this.blocks[i];
-            if (block.iso_x < this.min_x) this.min_x = Math.ceil(block.iso_x);
-            if (block.iso_y < this.min_y) this.min_y = Math.ceil(block.iso_y);
-
-            if (block.iso_x > this.max_x) this.max_x = Math.ceil(block.iso_x);
-            if (block.iso_y > this.max_y) this.max_y = Math.ceil(block.iso_y);
-        }
-    }
-}
+}   

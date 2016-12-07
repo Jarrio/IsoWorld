@@ -18,14 +18,14 @@ class CustomCommands {
         FlxG.debugger.track(sprite.iso_bounds, sprite.entity + " body").reposition(0, body_height);
     }
 
-    public function group(member:Int):IsoSprite {
-        var sprite = new IsoSprite();
-        if (this.state.group.members[member] != null) {
-            sprite = this.state.group.members[member];
-        }
+    // public function group(member:Int):IsoSprite {
+    //     var sprite = new IsoSprite();
+    //     if (this.state.group.members[member] != null) {
+    //         // sprite = this.state.group.members[member];
+    //     }
 
-        return sprite;
-    }    
+    //     // return sprite;
+    // }    
 
 
 }
