@@ -24,9 +24,12 @@ import system.utility.ThreadPool;
 import flixel.ui.FlxButton;
 
 import flixel.addons.text.FlxTextField;
-import flixel.addons.ui.FlxInputText;
+// import flixel.addons.ui.FlxInputText;
+
 
 using flixel.util.FlxArrayUtil;
+
+
 
 import system.world.World;
 
@@ -34,7 +37,7 @@ class MenuState extends FlxState {
 	public var depth:Depth;
 	public var generate:Generate;
 
-	public var group:FlxTypedSpriteGroup<FlxTypedSpriteGroup<IsoSprite>> = new FlxTypedSpriteGroup<FlxTypedSpriteGroup<IsoSprite>>();
+	public var group:FlxTypedSpriteGroup<IsoSprite> = new FlxTypedSpriteGroup<IsoSprite>();
 	public var unloaded_chunks:Array<Chunk> = new Array<Chunk>();
 	public var text:FlxText;
 	
@@ -51,9 +54,9 @@ class MenuState extends FlxState {
 	public var label_y:FlxTextField;
 	public var label_z:FlxTextField;
 
-	public var text_x:FlxInputText;
-	public var text_y:FlxInputText;
-	public var text_z:FlxInputText;
+	// public var text_x:FlxInputText;
+	// public var text_y:FlxInputText;
+	// public var text_z:FlxInputText;
 
 	public var render_distance:Int = 3;
 
@@ -113,23 +116,23 @@ class MenuState extends FlxState {
 		// 	group.add(member);
 		// }
 
-		for (i in 0...generate.available_chunks.length) {
-			var chunk = this.generate.available_chunks[i];
-			chunk.ID = i;
-			this.group.add(chunk);			
-		}
-
-		// for (y in 0...this.blocks_y) {
-		// 	for (x in 0...this.blocks_x) {
-		// 		for (z in 0...blocks_z) {
-		// 			var member = new Block(x, y,z, AssetPaths.new_water_cube__png);
-		// 			member.world = this;
-		// 			group.add(member);
-		// 		}
-		// 	}
+		// for (i in 0...generate.available_chunks.length) {
+		// 	var chunk = this.generate.available_chunks[i];
+		// 	chunk.ID = i;
+		// 	this.group.add(chunk);			
 		// }
 
-		group.members[0].add(player);
+		for (y in 0...this.blocks_y) {
+			for (x in 0...this.blocks_x) {
+				for (z in 0...blocks_z) {
+					var member = new Block(x, y,z, AssetPaths.new_water_cube__png);
+					member.world = this;
+					group.add(member);
+				}
+			}
+		}
+
+		group.members.add(player);
 		add(group);		
 
 		// add(label_x);
@@ -258,21 +261,21 @@ class MenuState extends FlxState {
 	public var tab_index:Int = -1;
 	public var tab_active:Bool = false;
 	override public function update(elapsed:Float):Void	{	
-		for (i in 0...group.members.length) {
-			var chunk = group.members[i];
-			if (!chunk.alive) break;
-			for (j in 0...chunk.members.length) {
-				chunk.members[j].iso_bounds.PreUpdate();	
-			}
-		}
+		// for (i in 0...group.members.length) {
+		// 	var chunk = group.members[i];
+		// 	if (!chunk.alive) break;
+		// 	for (j in 0...chunk..length) {
+		// 		chunk.members[j].iso_bounds.PreUpdate();	
+		// 	}
+		// }
 
-		for (i in 0...group.members.length) {
-			var chunk = group.members[i];
-			if (!chunk.alive) break;
-			for (j in 0...chunk.members.length) {
-				this.depth.update_bounding_cube(chunk.members[j]);
-			}
-		}
+		// for (i in 0...group.members.length) {
+		// 	var chunk = group.members[i];
+		// 	if (!chunk.alive) break;
+		// 	for (j in 0...chunk.members.length) {
+		// 		this.depth.update_bounding_cube(chunk.members[j]);
+		// 	}
+		// }
 		
 		this.game.Collide(this.player, this.group.members); 
 		super.update(elapsed);	
@@ -355,13 +358,13 @@ class MenuState extends FlxState {
 
 		
 		
-		for (i in 0...group.members.length) {
-			var chunk = group.members[i];
-			if (!chunk.alive) break;
-			for (j in 0...chunk.members.length) {
-				chunk.members[j].iso_bounds.PostUpdate();	
-			}
-		}
+		// for (i in 0...group.members.length) {
+		// 	var chunk = group.members[i];
+		// 	if (!chunk.alive) break;
+		// 	for (j in 0...chunk.members.length) {
+		// 		chunk.members[j].iso_bounds.PostUpdate();	
+		// 	}
+		// }
 
 		//FlxG.watch.addQuick("Intersects", this.game.intersects(player.iso_bounds, group.members[0].iso_bounds));
 		// FlxG.watch.addQuick("overlap", this.world.overlap);

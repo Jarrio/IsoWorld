@@ -419,6 +419,7 @@ class Body {
 
     @:noCompletion
     public function get_z():Float {
+        
         return this.position.z;
     }     
 }
