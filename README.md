@@ -14,6 +14,8 @@ Enjoy!
 ### What to expect
 - incomplete overlap check - isometric math/physics is quite difficult to get right my way isn't necessarily the only way
 - x/y/z coords
+- basic chunking
+- loading/unloading chunks
 - basic conceptual procedural terrain generation
 - i think i did handle collision in this at one point, there may be a way to turn it on but I can't recall
 - i used threads in this but can't remember why, they may not be needed at all
