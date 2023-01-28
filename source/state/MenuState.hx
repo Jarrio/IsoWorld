@@ -41,9 +41,9 @@ class MenuState extends FlxState {
 
 	public var thread_pool:ThreadPool;
 
-	public var label_x:FlxTextField;
-	public var label_y:FlxTextField;
-	public var label_z:FlxTextField;
+	public var label_x:FlxText;
+	public var label_y:FlxText;
+	public var label_z:FlxText;
 
 	public var text_x:FlxTextField;
 	public var text_y:FlxTextField;
@@ -77,13 +77,13 @@ class MenuState extends FlxState {
 
 		player = new Player(0, 0, -1, null, this);
 
-		 label_x = new FlxTextField(0, 0, 32, "x: ", 26);
+		 label_x = new FlxText(0, 0, 150, "x: ", 26);
 		 label_x.color = FlxColor.BLACK;
 
-		 label_y = new FlxTextField(0, 0, 32, "y: ", 26);
+		 label_y = new FlxText(0, 0, 150, "y: ", 26);
 		 label_y.color = FlxColor.BLACK;
 
-		 label_z = new FlxTextField(0, 0, 32, "z: ", 26);
+		 label_z = new FlxText(0, 0, 150, "z: ", 26);
 		 label_z.color = FlxColor.BLACK;
 
 		// text_x = new FlxInputText(0, 0, 100, Std.string(this.blocks_x), 26, FlxColor.BLACK, FlxColor.TRANSPARENT);
@@ -275,6 +275,9 @@ class MenuState extends FlxState {
 		label_z.y = (this.player.y - 230);
 		label_z.x = (this.player.x - 600);
 
+		label_x.text = 'x: ${this.player.iso_x}';
+		label_y.text = 'y: ${this.player.iso_y}';
+		label_z.text = 'z: ${this.player.iso_z}';
 		// text_x.y = (this.player.y - 290);
 		// text_x.x = (this.player.x - 600) + 40;
 

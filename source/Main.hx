@@ -5,7 +5,6 @@ import openfl.Lib;
 import openfl.display.Sprite;
 import state.MenuState;
 import state.ChunkState;
-import state.TestState;
 // #if (debug && cpp)
 // import debugger.HaxeRemote;
 // #end
