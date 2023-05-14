@@ -27,7 +27,7 @@ class Block extends IsoSprite {
         if (FlxG.mouse.overlaps(this)) {
             if (FlxG.mouse.justPressed) {
                 //FlxG.log.notice(return_debug_values('Block ${IsoDepth}'));
-                FlxG.log.notice("Block ID: " + ${this.ID});
+                FlxG.log.notice("Block ID: " + this.ID);
             }
             color = FlxColor.GRAY;
 
