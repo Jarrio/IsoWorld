@@ -26,12 +26,11 @@ I use the below library to generate the terrain/blocks from a seed.
 haxelib git libnoise https://github.com/memilian/libnoise/
 ```
 Last tested on:
-
-Haxe: **4.3.1**
-Hashlink: **1.13** Windows
-Haxeflixel: **5.3.1**
-Openfl: **9.2.1**
-Lime: **8.0.1**
+- Haxe: **4.3.1**
+- Hashlink: **1.13** Windows
+- Haxeflixel: **5.3.1**
+- Openfl: **9.2.1**
+- Lime: **8.0.1**
 
 
 ### Movement
